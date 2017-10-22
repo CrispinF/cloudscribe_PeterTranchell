@@ -253,6 +253,19 @@ paket-files/
 .idea/
 *.sln.iml
 
+.vscode/launch.json
+**/.vs/**
+**/dp_keys/**
+**/nodb_storage/projects/default/logitem/**
+**/nodb_storage/projects/default/userlocation/**
+**/pageversionhistory/**
+**/postversionhistory/**
+**/userlocation/**
+**/appsettings.local.overrides.json
+**/appsettings.Production.json
+**/appsettings.Development.json
+**/wwwroot/lib/**
+
 # CodeRush
 .cr/
 
