@@ -253,6 +253,7 @@ paket-files/
 .idea/
 *.sln.iml
 
+# CF cloudscribe
 .vscode/launch.json
 **/.vs/**
 **/dp_keys/**
@@ -265,6 +266,7 @@ paket-files/
 **/appsettings.Production.json
 **/appsettings.Development.json
 **/wwwroot/lib/**
+**/*.min.*
 
 # CodeRush
 .cr/
