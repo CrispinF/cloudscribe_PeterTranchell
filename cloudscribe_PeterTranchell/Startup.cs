@@ -1,190 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+
 
 namespace cloudscribe_PeterTranchell
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment env,
+            ILogger<Startup> logger
+            )
         {
-            Configuration = configuration;
-            Environment = env;
+            _configuration = configuration;
+            _environment = env;
+            _log = logger;
+
+            _sslIsAvailable = _configuration.GetValue<bool>("AppSettings:UseSsl");
         }
 
-        public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; set; }
-        public bool SslIsAvailable { get; set; }
+        private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
+        private readonly bool _sslIsAvailable;
+        private readonly ILogger _log;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // **** VERY IMPORTANT *****
-            // data protection keys are used to encrypt the auth token in the cookie
-            // and also to encrypt social auth secrets and smtp password in the data storage
-            // therefore we need keys to be persistent in order to be able to decrypt
-            // if you move an app to different hosting and the keys change then you would have
-            // to update those settings again from the Administration UI
+            //// **** VERY IMPORTANT *****
+            // This is a custom extension method in Config/DataProtection.cs
+            // These settings require your review to correctly configur data protection for your environment
+            services.SetupDataProtection(_configuration, _environment);
 
-            // for IIS hosting you should use a powershell script to create a keyring in the registry
-            // per application pool and use a different application pool per app
-            // https://docs.microsoft.com/en-us/aspnet/core/publishing/iis#data-protection
-            // https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?tabs=aspnetcore2x
-            if(Environment.IsProduction())
+            services.AddAuthorization(options =>
             {
-                // If using Azure for production the uri with sas token could be stored in azure as environment variable or using key vault
-                // but the keys go in azure blob storage per docs https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers
-                //var dpKeysUrl = Configuration["AppSettings:DataProtectionKeysBlobStorageUrl"];
-                services.AddDataProtection()
-                    //.PersistKeysToAzureBlobStorage(new Uri(dpKeysUrl))
-                    ;
-            }
-            else
-            {
-                // dp_Keys folder should be added to .gitignore so the keys don't go into source control
-                // ie add a line with: **/dp_keys/**
-                // to your .gitignore file
-                string pathToCryptoKeys = Path.Combine(Environment.ContentRootPath, "dp_keys");
-                services.AddDataProtection()
-                    .PersistKeysToFileSystem(new System.IO.DirectoryInfo(pathToCryptoKeys))
-                    ;
-            }
+                //https://docs.asp.net/en/latest/security/authorization/policies.html
+                //** IMPORTANT ***
+                //This is a custom extension method in Config/Authorization.cs
+                //That is where you can review or customize or add additional authorization policies
+                options.SetupAuthorizationPolicies();
 
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
             });
 
-            services.AddMemoryCache();
-
-            //services.AddSession();
-
-            ConfigureAuthPolicy(services);
-
-            services.AddOptions();
+            //// **** IMPORTANT *****
+            // This is a custom extension method in Config/CloudscribeFeatures.cs
+            services.SetupDataStorage(_configuration, false);
 
 
-            var connectionString = Configuration.GetConnectionString("EntityFrameworkConnection");
+            //*** Important ***
+            // This is a custom extension method in Config/CloudscribeFeatures.cs
+            services.SetupCloudscribeFeatures(_configuration);
 
-            services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
-            services.AddCloudscribeLoggingEFStorageMSSQL(connectionString);
-            services.AddCloudscribeLogging();
-            services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
+            //*** Important ***
+            // This is a custom extension method in Config/Localization.cs
+            services.SetupLocalization();
 
-            services.AddCloudscribeSimpleContactForm(Configuration);
-            services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
-            services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.SimpleContent.Web.Services.PagesNavigationNodePermissionResolver>();
-            services.AddCloudscribeCoreMvc(Configuration);
-            services.AddCloudscribeCoreIntegrationForSimpleContent(Configuration);
-            services.AddSimpleContentMvc(Configuration);
-            services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
-            services.AddSimpleContentRssSyndiction();
-            
-            // optional but recommended if you need localization 
-            // uncomment to use cloudscribe.Web.localization https://github.com/joeaudette/cloudscribe.Web.Localization
-            //services.Configure<GlobalResourceOptions>(Configuration.GetSection("GlobalResourceOptions"));
-            //services.AddSingleton<IStringLocalizerFactory, GlobalResourceManagerStringLocalizerFactory>();
-
-            services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
-
-            services.Configure<RequestLocalizationOptions>(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                var supportedCultures = new[]
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = cloudscribe.Core.Identity.SiteCookieConsent.NeedsConsent;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.ConsentCookie.Name = "cookieconsent_status";
+            });
+
+            services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
+            //*** Important ***
+            // This is a custom extension method in Config/RoutingAndMvc.cs
+            services.SetupMvc(_sslIsAvailable);
+
+            if (!_environment.IsDevelopment())
+            {
+                var httpsPort = _configuration.GetValue<int>("AppSettings:HttpsPort");
+                services.AddHttpsRedirection(options =>
                 {
-                    new CultureInfo("en-US"),
-                    //new CultureInfo("en-GB"),
-                    //new CultureInfo("fr-FR"),
-                    //new CultureInfo("fr"),
-                };
-
-                // State what the default culture for your application is. This will be used if no specific culture
-                // can be determined for a given request.
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
-
-                // You must explicitly state which cultures your application supports.
-                // These are the cultures the app supports for formatting numbers, dates, etc.
-                options.SupportedCultures = supportedCultures;
-
-                // These are the cultures the app supports for UI strings, i.e. we have localized resources for.
-                options.SupportedUICultures = supportedCultures;
-
-                // You can change which providers are configured to determine the culture for requests, or even add a custom
-                // provider with your own logic. The providers will be asked in order to provide a culture for each request,
-                // and the first to provide a non-null result that is in the configured supported cultures list will be used.
-                // By default, the following built-in providers are configured:
-                // - QueryStringRequestCultureProvider, sets culture via "culture" and "ui-culture" query string values, useful for testing
-                // - CookieRequestCultureProvider, sets culture via "ASPNET_CULTURE" cookie
-                // - AcceptLanguageHeaderRequestCultureProvider, sets culture via the "Accept-Language" request header
-                //options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
-                //{
-                //  // My custom request culture logic
-                //  return new ProviderCultureResult("en");
-                //}));
-            });
-
-            SslIsAvailable = Configuration.GetValue<bool>("AppSettings:UseSsl");
-            services.Configure<MvcOptions>(options =>
-            {
-                if (SslIsAvailable)
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                }
-
-                options.CacheProfiles.Add("SiteMapCacheProfile",
-                     new CacheProfile
-                     {
-                         Duration = 30
-                     });
-
-                options.CacheProfiles.Add("RssCacheProfile",
-                     new CacheProfile
-                     {
-                         Duration = 100
-                     });
-            });
-
-            services.AddRouting(options =>
-            {
-                options.LowercaseUrls = true;
-            });
-
-            services.AddMvc()
-                .AddRazorOptions(options =>
-                {
-                    options.AddCloudscribeViewLocationFormats();
-
-                    options.AddCloudscribeCommonEmbeddedViews();
-                    options.AddCloudscribeNavigationBootstrap3Views();
-                    options.AddCloudscribeCoreBootstrap3Views();
-                    options.AddCloudscribeSimpleContentBootstrap3Views();
-                    options.AddCloudscribeFileManagerBootstrap3Views();
-                    options.AddCloudscribeLoggingBootstrap3Views();
-                    options.AddCloudscribeSimpleContactFormViews();
-
-                    options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = httpsPort;
                 });
+            }
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
+            IServiceProvider serviceProvider,
+            IApplicationBuilder app,
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IOptions<cloudscribe.Core.Models.MultiTenantOptions> multiTenantOptionsAccessor,
@@ -194,17 +104,23 @@ namespace cloudscribe_PeterTranchell
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/oops/error");
+                if (_sslIsAvailable)
+                {
+                    app.UseHsts();
+                }
             }
-
-            app.UseForwardedHeaders();
+            if (_sslIsAvailable)
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseStaticFiles();
-            //app.UseSession();
+            app.UseCloudscribeCommonStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);
 
@@ -213,98 +129,22 @@ namespace cloudscribe_PeterTranchell
             app.UseCloudscribeCore(
                     loggerFactory,
                     multiTenantOptions,
-                    SslIsAvailable);
+                    _sslIsAvailable);
 
-            UseMvc(app);
-            
-        }
-        private void UseMvc(IApplicationBuilder app)
-        {
+
+
             app.UseMvc(routes =>
             {
-                
-                routes.AddBlogRoutesForSimpleContent();
-                routes.AddSimpleContentStaticResourceRoutes();
-                routes.AddCloudscribeFileManagerRoutes();
-
-                routes.MapRoute(
-                    name: "errorhandler",
-                    template: "oops/error/{statusCode?}",
-                    defaults: new { controller = "Oops", action = "Error" }
-                    );
-
-                routes.MapRoute(
-                    name: "contact",
-                    template: "contact",
-                    defaults: new { controller = "Contact", action = "Index" }
-                    );
-
-                routes.MapRoute(
-                    name: "sitemap",
-                    template: "sitemap"
-                    , defaults: new { controller = "Page", action = "SiteMap" }
-                    );
-                routes.MapRoute(
-                    name: "def",
-                    template: "{controller}/{action}"
-                    //,defaults: new { controller = "Home", action = "Index" }
-                    );
-                routes.AddDefaultPageRouteForSimpleContent();
-                
-
-
-
-            });
-        }
-
-        private void ConfigureAuthPolicy(IServiceCollection services)
-        {
-            //https://docs.asp.net/en/latest/security/authorization/policies.html
-
-            services.AddAuthorization(options =>
-            {
-                options.AddCloudscribeCoreDefaultPolicies();
-                options.AddCloudscribeLoggingDefaultPolicy();
-                
-                options.AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies();
-                // this is what the above extension adds
-                //options.AddPolicy(
-                //    "BlogEditPolicy",
-                //    authBuilder =>
-                //    {
-                //        //authBuilder.RequireClaim("blogId");
-                //        authBuilder.RequireRole("Administrators");
-                //    }
-                // );
-
-                //options.AddPolicy(
-                //    "PageEditPolicy",
-                //    authBuilder =>
-                //    {
-                //        authBuilder.RequireRole("Administrators");
-                //    });
-
-                options.AddPolicy(
-                    "FileManagerPolicy",
-                    authBuilder =>
-                    {
-                        authBuilder.RequireRole("Administrators", "Content Administrators");
-                    });
-
-                options.AddPolicy(
-                    "FileManagerDeletePolicy",
-                    authBuilder =>
-                    {
-                        authBuilder.RequireRole("Administrators", "Content Administrators");
-                    });
-
-
-                // add other policies here 
-
+                var useFolders = multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName;
+                //*** IMPORTANT ***
+                // this is in Config/RoutingAndMvc.cs
+                // you can change or add routes there
+                routes.UseCustomRoutes(useFolders);
             });
 
         }
 
-        
+
+
     }
 }
