@@ -5,37 +5,36 @@
 
 body {
     min-height: 100vh;
-    padding-top: 4.6rem;
+    padding-top: 4.5rem;
 }
-
 
 #newPostLink {
     position: absolute;
-    top: 120px;
+    top: 70px;
     right: 0px;
 }
 
 #editPostLink {
     position: absolute;
-    top: 155px;
+    top: 100px;
     right: 0px;
 }
 
 #pageManagerLink {
     position: absolute;
-    top: 115px;
+    top: 70px;
     right: 0px;
 }
 
 #newPageLink {
     position: absolute;
-    top: 145px;
+    top: 100px;
     right: 0px;
 }
 
 #editPageLink {
     position: absolute;
-    top: 175px;
+    top: 130px;
     right: 0px
 }
 #sidenavtoggle {

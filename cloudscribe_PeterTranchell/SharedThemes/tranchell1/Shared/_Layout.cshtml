@@ -57,37 +57,39 @@
     <div id="wrapper" class="container-fluid cs-container flex-fill">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         <div class="row">
-            <main id="content" role="main" class="col order-3">
-                @await Html.PartialAsync("AlertsPartial")
-                <partial name="_CookieConsentPartial" />
-                @RenderBody()
-            </main>
-            @if (sideNavVisible)
-            {
-                <nav id="sidenavmenu" class=" col col-3 order-1 @sideNavToggleClass">
-                    @RenderSection("SideNav", required: false)
-                </nav>
 
-            }
-            @if (asideSecondaryVisible)
-            {
-                <aside id="asideSecondary" class="col col-1 order-2">
-                    @RenderSection("AsideSecondary", required: false)
-                </aside>
 
-            }
-            @if (asidePrimaryVisible)
-            {
-                <aside id="asidePrimary" class="col-12 col-md-3 col-sm-12  col-sm-12 order-4">
-                    @RenderSection("AsidePrimary", required: false)
-                </aside>
+                <main id="content" role="main" class="col order-3">
+                    @await Html.PartialAsync("AlertsPartial")
+                    <partial name="_CookieConsentPartial" />
+                    @RenderBody()
+                </main>
+                @if (sideNavVisible)
+                {
+                    <nav id="sidenavmenu" class=" col col-3 order-1 @sideNavToggleClass">
+                        @RenderSection("SideNav", required: false)
+                    </nav>
 
-            }
+                }
+                @if (asideSecondaryVisible)
+                {
+                    <aside id="asideSecondary" class="col col-1 order-2">
+                        @RenderSection("AsideSecondary", required: false)
+                    </aside>
+
+                }
+                @if (asidePrimaryVisible)
+                {
+                    <aside id="asidePrimary" class="col-12 col-md-3 col-sm-12  col-sm-12 order-4">
+                        @RenderSection("AsidePrimary", required: false)
+                    </aside>
+
+                }
+            </div>
+
         </div>
-    </div>
     <footer class="sticky-bottom border pt-2 d-flex h-100 flex-wrap flex-grow justify-content-center">
-        @*CF added*@
-        <div class="addthis_inline_follow_toolbox"></div>
+
 
         <div class="p-2">
             <ul class="list-unstyled d-flex flex-wrap">
@@ -108,10 +110,12 @@
                     @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
                     <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
                 </li>
+
             </ul>
         </div>
-        <div class="p-2 text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>
+        @*<div class="row text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>*@
         <partial name="_CookieConsentRevokePartial" />
+
     </footer>
     @RenderSection("Toolbar", required: false)
     <environment names="Development">
