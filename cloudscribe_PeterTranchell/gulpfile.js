@@ -24,7 +24,7 @@ gulp.task('buildCustom1ThemeCss', function () {
         includePaths: [
             config.srcSassDir
            
-        ],
+        ]
     }).on('error', sass.logError)
         )
     .pipe(sourcemaps.write())
