@@ -18,6 +18,8 @@
     </None>
 
     <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
+
+    <Content Remove="bundleconfig.json" />
     <Content Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
     
     <Content Include="sitefiles\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
@@ -86,20 +88,24 @@
     <None Remove="sitefiles\s1\themes\tranchell1\wwwroot\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+  </ItemGroup>
+
   <ItemGroup Label="Package References">
 
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.64" />
-    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.31" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.66" />
+    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.32" />
     <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.0.10" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="3.0.11" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="3.0.12" />
     
     <PackageReference Include="cloudscribe.Core.SimpleContent" Version="4.0.9" />
-    <PackageReference Include="cloudscribe.SimpleContent.Web" Version="4.0.27" />
-    <PackageReference Include="cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4" Version="4.0.6" />
-    <PackageReference Include="cloudscribe.SimpleContent.CompiledViews.Bootstrap4" Version="4.0.23" />
+    <PackageReference Include="cloudscribe.SimpleContent.Web" Version="4.0.29" />
+    <PackageReference Include="cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4" Version="4.0.7" />
+    <PackageReference Include="cloudscribe.SimpleContent.CompiledViews.Bootstrap4" Version="4.0.24" />
     <PackageReference Include="cloudscribe.SimpleContent.MetaWeblog" Version="4.0.9" />
     <PackageReference Include="cloudscribe.SimpleContent.Syndication" Version="4.0.6" />
-    <PackageReference Include="cloudscribe.SimpleContent.ContentTemplates.Bootstrap4" Version="1.0.16" />
+    <PackageReference Include="cloudscribe.SimpleContent.ContentTemplates.Bootstrap4" Version="1.0.17" />
     <PackageReference Include="cloudscribe.SimpleContent.Storage.EFCore.MSSQL" Version="4.0.10" />
 
     <PackageReference Include="cloudscribe.Logging.Web" Version="3.0.9" />
