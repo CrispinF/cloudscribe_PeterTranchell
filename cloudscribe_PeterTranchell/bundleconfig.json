@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "SharedThemes/tranchell1/wwwroot/css/site.min.css",
+    "inputFiles": [
+      "SharedThemes/tranchell1/wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "SharedThemes/tranchell1/wwwroot/css/bootstrap.min.css",
+    "inputFiles": [
+      "SharedThemes/tranchell1/wwwroot/css/bootstrap.css"
+    ]
+  }
+]
