@@ -225,3 +225,13 @@ td img, video, iframe {
     white-space: nowrap;
 }
 /******** end jquery smart menu bootstrap-4 *****************/
+
+/******** blockquote *****************/
+blockquote {
+    position: relative;
+    padding-left: 1em;
+    border-left: 0.2em solid #ecf0f1;
+
+}
+
+
