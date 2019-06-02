@@ -44,7 +44,9 @@
             </div>
         </a>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
-            <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
+            @*<a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>*@
+            @*Make site title an H1 element and no need for link as first menu item is home link *@
+            <h1 style="display:inline-block;font-size:1.2rem;padding-top:0.35rem;white-space:nowrap;margin-right:1.5em;">@(Tenant?.SiteName ?? "Sample")</h1>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -94,47 +96,49 @@
 
         <div class="p-2">
             @*Horiz list with | on larger screens, vertical centred list on xs*@
-            <ul class="list-unstyled d-flex flex-wrap">
-                <li class=" mr-2">
-                    <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
-                </li>
-                @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
-                {
-                    <li class="border-left pl-2 mr-2">
-                        <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
-                    </li>
-                }
-                <li class="border-left pl-2 mr-2">
-                    <a href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
-                </li>
-                <li class="border-left pl-2 mr-2">
-                    <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
-                </li>
-
-            </ul>
-        </div>
-    </footer>
-        <footer class="sticky-bottom border pt-2 d-xs-flex d-sm-none h-100 flex-wrap flex-grow justify-content-start">
-            <div class="ml-1">
-                <ul class="list-unstyled flex-column">
-                    <li class="pl-0">
+            <nav>
+                <ul class="list-unstyled d-flex flex-wrap">
+                    <li class=" mr-2">
                         <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                     </li>
                     @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
                     {
-                        <li>
+                        <li class="border-left pl-2 mr-2">
                             <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                         </li>
                     }
-                    <li>
-                        <a class="text-nowrap" href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
+                    <li class="border-left pl-2 mr-2">
+                        <a href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
                     </li>
-                    <li>
+                    <li class="border-left pl-2 mr-2">
                         <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
                     </li>
 
                 </ul>
-
+            </nav>
+        </div>
+    </footer>
+        <footer class="sticky-bottom border pt-2 d-xs-flex d-sm-none h-100 flex-wrap flex-grow justify-content-start">
+            <div class="ml-1">
+                <nav>
+                    <ul class="list-unstyled flex-column">
+                        <li class="pl-0">
+                            <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
+                        </li>
+                        @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
+                        {
+                            <li>
+                                <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
+                            </li>
+                        }
+                        <li>
+                            <a class="text-nowrap" href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
+                        </li>
+                        <li>
+                            <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
             @*<div class="row text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>*@
