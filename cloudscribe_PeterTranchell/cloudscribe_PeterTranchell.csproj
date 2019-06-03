@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -18,12 +18,7 @@
     </None>
 
     <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
-
-    <Content Remove="bundleconfig.json" />
-
-    <Content Remove="Views\Blog\ArchiveListPartial.cshtml" />
     <Content Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
-    
     <Content Include="sitefiles\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="SharedThemes\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
 
@@ -90,10 +85,6 @@
     <None Remove="sitefiles\s1\themes\tranchell1\wwwroot\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="bundleconfig.json" />
-    <None Include="Views\Blog\ArchiveListPartial.cshtml" />
-  </ItemGroup>
 
   <ItemGroup Label="Package References">
 
@@ -136,17 +127,6 @@
     
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="SharedThemes\darkly - Copy\Shared\_Layout.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="sitefiles\s1\themes\tranchell1\Shared\_Layout.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="sitefiles\s1\Views\Blog\AboutPartial.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-  </ItemGroup>
 
 
 </Project>
