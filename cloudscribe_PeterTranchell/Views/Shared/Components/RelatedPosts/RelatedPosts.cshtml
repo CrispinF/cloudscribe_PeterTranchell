@@ -26,24 +26,25 @@
 
 @if (Model.Posts.Count > 0)
 {
+    <nav aria-labelledby="@sr["Related Posts"]">
     <h3 class="featured-posts"><i class="@themeSettings.Icons.RelatedPosts" aria-hidden="true"></i>&nbsp;@sr["Related Posts"]</h3>
-    <nav>
-        @foreach (var post in Model.Posts)
+    @foreach (var post in Model.Posts)
+    {
+        if (!post.PubDate.HasValue) { continue; }
+        var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
+    <div class="media mb-1 robots-nocontent">
+        @*robots-nocontent class may help deter search engines fron indexing this section*@
+        @if (!string.IsNullOrWhiteSpace(imgUrl))
         {
-            if (!post.PubDate.HasValue) { continue; }
-            var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
-            <div class="media mb-1">
-                @if (!string.IsNullOrWhiteSpace(imgUrl))
-                {
-                    <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
-                }
-                <div class="media-body pl-1">
-                    <h4 class="media-heading">
-                        <a href="@GetUrl(post)">@post.Title</a>
-                    </h4>
-                    <small>@Model.FormatDate(post.PubDate.Value)</small>
-                </div>
-            </div>
+            <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
         }
+        <div class="media-body pl-1">
+            <h4 class="media-heading">
+                <a href="@GetUrl(post)">@post.Title</a>
+            </h4>
+            <small>@Model.FormatDate(post.PubDate.Value)</small>
+        </div>
+    </div>
+    }
     </nav>
 }
