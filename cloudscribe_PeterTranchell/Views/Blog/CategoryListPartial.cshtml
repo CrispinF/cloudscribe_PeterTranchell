@@ -1,5 +1,6 @@
-﻿@* This overridden view is purely to wrap the list of links in a nav element, in an attempt to stop the words in the category list being indexed with the page.
+﻿@* This overridden view is purely to robots-nocontent class, in an attempt to stop the words in the category list being indexed with the page.
     i.e. we don't want the keyword "bassoon" being indexed for a choral work just because it is on the page in the list of used categories.
+    NB the fact that the default cs view now encloses this in nav may already be sufficient.
     CF 3rd June 2019 *@
 
 @model Dictionary<string, int>
@@ -9,22 +10,21 @@
 @{
     var themeSettings = themeHelper.GetThemeSettings();
 }
-<section class="panel panel-default">
-    <nav aria-labelledby="@sr["Categories"]">
-        <div class="panel-heading">
-            <h3><i class="@themeSettings.Icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
-        </div>
-        <div class="panel-body robots-nocontent">
-            @*robots-nocontent class may help deter search engines fron indexing this section*@
-            <ul class="list-inline category-list">
-                @foreach (var cat in Model)
-                {
-                    <li>
-                        <a asp-route="@blogRoutes.BlogCategoryRouteName"
-                           asp-route-category="@cat.Key">@cat.Key (@cat.Value)</a>
-                    </li>
-                }
-            </ul>
-        </div>
-    </nav>
-</section>
+
+<nav class="panel panel-default" aria-labelledby="hCategories">
+    <div class="panel-heading">
+        <h3 id="hCategories"><i class="@themeSettings.Icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
+    </div>
+    @*robots-nocontent class may help deter search engines fron indexing this section*@
+    <div class="panel-body robots-nocontent">
+        <ul class="list-inline category-list">
+            @foreach (var cat in Model)
+            {
+                <li>
+                    <a asp-route="@blogRoutes.BlogCategoryRouteName"
+                       asp-route-category="@cat.Key">@cat.Key (@cat.Value)</a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
