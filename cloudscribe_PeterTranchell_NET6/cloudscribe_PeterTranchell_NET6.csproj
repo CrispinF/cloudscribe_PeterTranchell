@@ -22,6 +22,10 @@
     </None>
 
     <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
+
+    <Content Include="app-scss\_variables.scss">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
     
     <Content Include="sitefiles\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
@@ -30,10 +34,46 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\bootstrap.css_orig" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\bootstrap.min.css_orig" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\fontawesome-all.css_orig" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\fontawesome-all.min.css" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\site.css_orig" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\style.css" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\style.min.css" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\css\_bootswatch.scss" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.bundle.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.bundle.js.map" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.bundle.min.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.bundle.min.js.map" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.esm.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.esm.js.map" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.esm.min.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\bootstrap.esm.min.js.map" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\jquery.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\jquery.min.js" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\js\jquery.min.map" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-brands-400.eot" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-brands-400.svg" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-brands-400.ttf" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-brands-400.woff" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-brands-400.woff2" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-regular-400.eot" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-regular-400.svg" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-regular-400.ttf" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-regular-400.woff" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-regular-400.woff2" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-solid-900.eot" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-solid-900.svg" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-solid-900.ttf" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-solid-900.woff" />
+    <None Remove="SharedThemes\tranchell2\wwwroot\webfonts\fa-solid-900.woff2" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\bootstrap.css" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\bootstrap.min.css" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\fontawesome-all.css" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\fontawesome-all.min.css" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\css\site.css" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\css\site.min.css" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\_bootswatch.scss" />
     <None Remove="SharedThemes\tranchell1\wwwroot\css\_variables.scss" />
     <None Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.bundle.js" />
@@ -47,17 +87,21 @@
     <None Remove="SharedThemes\tranchell1\wwwroot\js\jquery.js" />
     <None Remove="SharedThemes\tranchell1\wwwroot\js\jquery.min.js" />
     <None Remove="SharedThemes\tranchell1\wwwroot\js\jquery.min.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.bundle.js" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.bundle.js.map" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.bundle.min.js" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.bundle.min.js.map" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.esm.js" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.esm.js.map" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.esm.min.js" />
-    <_ContentIncludedByDefault Remove="SharedThemes\tranchell1\wwwroot\js\bootstrap.esm.min.js.map" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-brands-400.eot" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-brands-400.svg" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-brands-400.ttf" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-brands-400.woff" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-brands-400.woff2" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-regular-400.eot" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-regular-400.svg" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-regular-400.ttf" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-regular-400.woff" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-regular-400.woff2" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-solid-900.eot" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-solid-900.svg" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-solid-900.ttf" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-solid-900.woff" />
+    <None Remove="SharedThemes\tranchell1\wwwroot\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
 
   <ItemGroup Label="Package References">
@@ -119,60 +163,6 @@
 
     
     
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\js\jquery.min.map">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\js\jquery.min.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\js\jquery.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\bootstrap.min.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\bootstrap.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\fontawesome-all.min.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\fontawesome-all.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\_bootswatch.scss">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="SharedThemes\tranchell1\wwwroot\css\_variables.scss">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
   

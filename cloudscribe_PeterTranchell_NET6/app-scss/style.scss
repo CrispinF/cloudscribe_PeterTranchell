@@ -10,7 +10,7 @@ html {
 
 body {
     min-height: 100vh;
-    padding-top: 142px;
+    padding-top: 82px;
 }
 
 #newPostLink {
@@ -85,12 +85,15 @@ td img, video, iframe {
 }
 
 .brand-header {
-    height:100px;
+    height:0px;
 }
 
 header .navbar {
-    top: 100px;
+    top: 0px;
+    padding: 0.5em;
+    font-size: 1.25rem;
 }
+
 #toast-container {
     position: sticky;
     z-index: 1055;
