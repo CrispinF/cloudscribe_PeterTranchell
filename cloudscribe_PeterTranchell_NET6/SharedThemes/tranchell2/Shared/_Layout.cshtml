@@ -89,7 +89,7 @@
             }
         </div>
     </div>
-    <footer class="sticky-bottom border pt-2 d-none d-sm-flex h-100 flex-wrap flex-grow justify-content-center">
+    <footer class="sticky-bottom border pt-2 d-none d-lg-flex h-100 flex-wrap flex-grow justify-content-center">
 
 
         <div class="p-2">
@@ -106,7 +106,7 @@
                         </li>
                     }
                     <li class="border-start ps-2 me-2">
-                        <a href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
+                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
                     </li>
                     <li class="border-start ps-2 me-2">
                         <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
@@ -116,9 +116,9 @@
             </nav>
         </div>
     </footer>
-        <footer class="sticky-bottom border pt-2 d-xs-flex d-sm-none h-100 flex-wrap flex-grow justify-content-start">
+        <footer class="sticky-bottom border pt-2 d-lg-flex d-lg-none h-100 flex-wrap flex-grow justify-content-start">
             <div class="ms-5">
-                @* vertical centred list on xs*@
+                @* vertical centred list on md*@
                 <nav>
                     <ul class="list-unstyled flex-column">
                         <li class="ps-0">
@@ -130,8 +130,9 @@
                                 <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                             </li>
                         }
+                    
                         <li>
-                            <a class="text-nowrap" href="https://flowerbunch.org.uk/web-design?utm_source=tranchell&amp;utm_medium=referral&amp;utm_campaign=websitebycrispin" target="_blank">Website by Crispin</a>
+                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
                         </li>
                         <li>
                             <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
