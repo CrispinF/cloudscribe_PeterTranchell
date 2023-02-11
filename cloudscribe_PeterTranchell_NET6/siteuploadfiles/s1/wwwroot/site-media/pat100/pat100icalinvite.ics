@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ical.marudot.com//iCal Event Maker
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/London
+LAST-MODIFIED:20201011T015911Z
+TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London
+X-LIC-LOCATION:Europe/London
+BEGIN:DAYLIGHT
+TZNAME:BST
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0100
+DTSTART:19700329T010000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZNAME:GMT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0000
+DTSTART:19701025T020000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20220807T172917Z
+UID:1659893290257-51502@ical.marudot.com
+DTSTART;TZID=Europe/London:20221126T183000
+DTEND;TZID=Europe/London:20221126T223000
+SUMMARY:The Peter Tranchell Centenary Musical Soirée and Reception
+URL:https://peter-tranchell.uk/the-peter-tranchell-centenary-musical-soiree-and-reception-26th-november-2022-st-pauls-knightsbridge
+DESCRIPTION:Musical Soirée featuring the music of Peter Tranchell\, Cheryl Frances-Hoad\, and the winner of a Composition Competition for Organ\, followed by a ticketed reception.
+LOCATION:St. Paul's Church\, Knightsbridge\, 32a Wilton Place\, London SW1X 8SH
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Peter Tranchell Centenary Musical Soirée and Reception
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
