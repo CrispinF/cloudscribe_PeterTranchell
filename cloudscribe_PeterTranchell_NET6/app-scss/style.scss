@@ -3,6 +3,17 @@
 @import "jquery-smartmenu-bootstrap";
 @import "font-awesome";
 
+
+blockquote {
+    font-style: italic;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    padding: 2px 8px 2px 20px;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0;
+    border-left-width: 5px;
+}
+
 html {
     position: relative;
     min-height: 100%;
