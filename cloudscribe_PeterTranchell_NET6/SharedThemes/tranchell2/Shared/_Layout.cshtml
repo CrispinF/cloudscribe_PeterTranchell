@@ -165,7 +165,9 @@
                         }
                     
                         <li>
+
                         <span class="text-nowrap">&copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
+
                         </li>
                         <li>
                             <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
@@ -185,9 +187,9 @@
         <script src="~/cr/js/bs4.smartmenus.min.js"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        <script src="~/js/bootstrap.bundle.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        <script src="~/cr/js/bs4.smartmenus.min.js"></script>
+        <script src="~/js/jquery.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/js/bootstrap.bundle.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/cr/js/bs4.smartmenus.min.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)

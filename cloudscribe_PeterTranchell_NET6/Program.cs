@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using cloudscribe.QueryTool.EFCore.Common;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using cloudscribe.QueryTool.EFCore.Common;
 
 namespace cloudscribe_PeterTranchell_NET6
 {
@@ -57,7 +59,7 @@ namespace cloudscribe_PeterTranchell_NET6
             EmailQueueDatabase.InitializeDatabaseAsync(scopedServices).Wait();
             EmailTemplateDatabase.InitializeDatabaseAsync(scopedServices).Wait();
             EmailListDatabase.InitializeDatabaseAsync(scopedServices).Wait();
-
+            QueryToolStartup.InitializeDatabaseAsync(scopedServices).Wait();
 
 
 

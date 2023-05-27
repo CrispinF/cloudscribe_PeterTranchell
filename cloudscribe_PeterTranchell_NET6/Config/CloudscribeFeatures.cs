@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using cloudscribe.QueryTool.Services;
+using cloudscribe.QueryTool.EFCore.MSSQL;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,6 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
             )
         {
             var connectionString = config.GetConnectionString("EntityFrameworkConnection");
+            var queryToolConnectionString = config.GetConnectionString("QueryToolConnectionString");
 
 
             services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
@@ -37,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddEmailListStorageMSSQL(connectionString);
 
-
+            services.AddQueryToolEFStorageMSSQL(connectionString: connectionString, maxConnectionRetryCount: 0, maxConnectionRetryDelaySeconds: 30, transientSqlErrorNumbersToAdd: null);
 
 
 
@@ -85,7 +88,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddEmailListWithCloudscribeIntegration(config);
 
-
+            services.AddScoped<IQueryTool, QueryTool>();
 
 
 
