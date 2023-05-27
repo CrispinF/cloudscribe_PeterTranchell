@@ -159,7 +159,8 @@
     <PackageReference Include="cloudscribe.EmailList.KvpUserProperties.Integration" Version="6.0.*" />
    <PackageReference Include="cloudscribe.EmailList.Data.EFCore.MSSQL" Version="6.0.*" />
 
-
+    <PackageReference Include="cloudscribe.QueryTool.Web" Version="6.0.*" />
+    <PackageReference Include="cloudscribe.QueryTool.EFCore.MSSQL" Version="6.0.*" />
 
     
     

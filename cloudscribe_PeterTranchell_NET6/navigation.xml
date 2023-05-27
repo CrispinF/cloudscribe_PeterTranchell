@@ -632,7 +632,16 @@
                     </NavNode>
                 </Children>
             </NavNode>
-
+			  <NavNode key="QueryTool"
+					 controller="QueryTool"
+					 action="Index"
+					 text="Query Tool"
+					 iconCssClass="fas fa-database fa-fw"
+					 componentVisibility="breadcrumbs,childtree,parenttree"
+					 authorizationPolicy="QueryToolAdminPolicy"
+					 excludeFromSearchSiteMap="true">
+				  <Children> </Children>
+			  </NavNode>
               <NavNode key="SystemInfo"
                        controller="SystemInfo"
                        action="Index"
