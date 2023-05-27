@@ -89,10 +89,44 @@
             }
         </div>
     </div>
-    <footer class="sticky-bottom border pt-2 d-none d-lg-flex h-100 flex-wrap flex-grow justify-content-center">
 
 
-        <div class="p-2">
+    <footer class="sticky-bottom border-top mt-5 pt-2">
+        <section id="SocialMedia">
+        <div class="d-flex p-2 h-100 flex-wrap flex-grow justify-content-center">
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Facebook Group in a new tab" href="https://www.facebook.com/groups/peter.tranchell" target="_blank"><span class="fab fa-facebook-square fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Facebook Foundation Twitter in a new tab" href="https://twitter.com/TranchellFndn" target="_blank"><span class="fab fa-twitter fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell YouTube channel in a new tab" href="https://www.youtube.com/@@petertranchell7897" target="_blank"><span class="fab fa-youtube fa-3x" aria-hidden="true"></span></a></div>
+            </div>
+        </section>
+
+@*        <section id="NewsletterSignup">
+            <div class="container d-flex">
+                <div class="p-4 flex-fill text-center">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                    <h3>SIGN UP FOR OUR NEWSLETTER</h3>
+                    <p>
+                        Are you interested in keeping informed by The Peter Tranchell Foundation? Would you like to stay in the loop for future events? If so,
+                        please join our newsletter. You should expect to get no more than one email per month.
+                    </p>
+                    <form action="/" class="form-inline justify-content-center" id="NewsletterSignup" method="post">
+                        <div class="form-row">
+                            <div class="col-auto">
+                                <input type="email" name="email" id="Newsletter-Email" class="form-control" placeholder="name@example.com">
+                            </div>
+                            <div class="col-auto">
+                                <input type="submit" value="Subscribe Now" class="btn btn-primary">
+                            </div>
+                        </div>
+                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8LZLz_QPqFpNsf4QSApPDJq0T2XJcbQggg-Q_tAaUF5PKFNnI4N3Hjci_0RtQHLCYw6Mximg4lEiVVmMXAAAdG2SfqUO6DzDF9gDI9kHlWUV76BpMeyhS5jjjqlNuDeTCXvzraCIKNEXYnU6AjR-1t8">
+                    </form>                    <div class="text-center pt-2" style="display: none;" id="NewsletterSignupSuccessful">
+                        <strong>You've successfully registered for our newsletters.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>*@
+        
+        <div class="d-none d-lg-flex p-2 h-100 flex-wrap flex-grow justify-content-center">
             @*Horiz list with | on larger screens *@
             <nav>
                 <ul class="list-unstyled d-flex flex-wrap">
@@ -115,13 +149,12 @@
                 </ul>
             </nav>
         </div>
-    </footer>
-        <footer class="sticky-bottom border pt-2 d-lg-flex d-lg-none h-100 flex-wrap flex-grow justify-content-start">
-            <div class="ms-5">
-                @* vertical centred list on md*@
+
+        <div class="d-flex d-lg-none flex-column flex-wrap flex-grow justify-content-center align-items-center">
+                @* vertical centred list *@
                 <nav>
-                    <ul class="list-unstyled flex-column">
-                        <li class="ps-0">
+                <ul class="list-unstyled" style="text-align: center; list-style-position: inside;">
+                        <li class="">
                             <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                         </li>
                         @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
@@ -132,7 +165,7 @@
                         }
                     
                         <li>
-                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
+                        <span class="text-nowrap">&copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
                         </li>
                         <li>
                             <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
