@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using SendGrid.Helpers.Mail;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -44,20 +45,21 @@ namespace Microsoft.AspNetCore.Builder
                        , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
                        );
 
+                //Remove simple contact form
+                //routes.MapRoute(
+                //    name: "foldercontact-localized",
+                //    template: "{sitefolder}/{culture}/contact",
+                //    defaults: new { controller = "Contact", action = "Index" }
+                //    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), culture = new CultureSegmentRouteConstraint(true) }
+                //    );
 
-                routes.MapRoute(
-                    name: "foldercontact-localized",
-                    template: "{sitefolder}/{culture}/contact",
-                    defaults: new { controller = "Contact", action = "Index" }
-                    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), culture = new CultureSegmentRouteConstraint(true) }
-                    );
+                //routes.MapRoute(
+                //    name: "foldercontact",
+                //    template: "{sitefolder}/contact",
+                //    defaults: new { controller = "Contact", action = "Index" }
+                //    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                //    );
 
-                routes.MapRoute(
-                    name: "foldercontact",
-                    template: "{sitefolder}/contact",
-                    defaults: new { controller = "Contact", action = "Index" }
-                    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
-                    );
                 routes.MapRoute(
                        name: "foldersitemap-localized",
                        template: "{sitefolder}/{culture}/sitemap"
@@ -108,11 +110,11 @@ namespace Microsoft.AspNetCore.Builder
                 defaults: new { controller = "Oops", action = "Error" }
                 );
 
-            routes.MapRoute(
-                name: "contact",
-                template: "contact",
-                defaults: new { controller = "Contact", action = "Index" }
-                );
+            //routes.MapRoute(
+            //    name: "contact",
+            //    template: "contact",
+            //    defaults: new { controller = "Contact", action = "Index" }
+            //    );
 
             routes.MapRoute(
                        name: "api-sitemap-culture",
@@ -213,19 +215,19 @@ namespace Microsoft.AspNetCore.Builder
                        );
 
 
-                routes.MapControllerRoute(
-                    name: "foldercontact-localized",
-                    pattern: "{sitefolder}/{culture}/contact",
-                    defaults: new { controller = "Contact", action = "Index" }
-                    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), culture = new CultureSegmentRouteConstraint(true) }
-                    );
+                //routes.MapControllerRoute(
+                //    name: "foldercontact-localized",
+                //    pattern: "{sitefolder}/{culture}/contact",
+                //    defaults: new { controller = "Contact", action = "Index" }
+                //    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), culture = new CultureSegmentRouteConstraint(true) }
+                //    );
 
-                routes.MapControllerRoute(
-                    name: "foldercontact",
-                    pattern: "{sitefolder}/contact",
-                    defaults: new { controller = "Contact", action = "Index" }
-                    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
-                    );
+                //routes.MapControllerRoute(
+                //    name: "foldercontact",
+                //    pattern: "{sitefolder}/contact",
+                //    defaults: new { controller = "Contact", action = "Index" }
+                //    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                //    );
                 routes.MapControllerRoute(
                        name: "foldersitemap-localized",
                        pattern: "{sitefolder}/{culture}/sitemap"
@@ -276,11 +278,11 @@ namespace Microsoft.AspNetCore.Builder
                 defaults: new { controller = "Oops", action = "Error" }
                 );
 
-            routes.MapControllerRoute(
-                name: "contact",
-                pattern: "contact",
-                defaults: new { controller = "Contact", action = "Index" }
-                );
+            //routes.MapControllerRoute(
+            //    name: "contact",
+            //    pattern: "contact",
+            //    defaults: new { controller = "Contact", action = "Index" }
+            //    );
 
             routes.MapControllerRoute(
                        name: "api-sitemap-culture",

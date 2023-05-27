@@ -1,0 +1,25 @@
+﻿@model cloudscribe_PeterTranchell_NET6.ViewModels.MusicalWorkViewModel
+
+    <div class="container">
+        <h2>@Model.WorkTitle</h2>
+
+        <table class="table table-responsive">
+            <tr>
+                <th>Title</th>
+                <td><cite>@Model.WorkTitle</cite></td>
+            </tr>
+            <tr>
+                <th>Year</th>
+                <td>@Model.WorkYear</td>
+            </tr>
+
+            <tr>
+                <th>Genre</th>
+                <td>@Model.Genre</td>
+            </tr>
+        </table>
+        <h3>Precis</h3>
+        <div>@Html.Raw(Model.Precis)</div>
+
+    <p>Please also see our <a href="/guidance-on-the-use-of-scores-published-by-the-peter-tranchell-foundation">guidance on the use of this score</a><span>.</span></p>
+    </div>
