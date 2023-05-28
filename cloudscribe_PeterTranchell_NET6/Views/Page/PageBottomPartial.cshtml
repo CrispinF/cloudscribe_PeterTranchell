@@ -1,0 +1,6 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@if (Context.Request.Path == "/")
+{
+    @await Component.InvokeAsync("EmailListSubscribe", new { })
+}
+

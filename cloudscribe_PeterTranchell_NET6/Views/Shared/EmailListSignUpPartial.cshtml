@@ -1,0 +1,83 @@
+﻿@model cloudscribe.EmailList.Web.Mvc.ViewModels.EmailSubscribeViewModel
+@inject IStringLocalizer<cloudscribe.EmailList.Web.EmailListResources> sr
+@inject IRecaptchaKeysProvider recaptcheKeysProvider
+@{
+    var keys = await recaptcheKeysProvider.GetKeys().ConfigureAwait(false);
+    var shouldUseCaptcha = !Context.User.Identity.IsAuthenticated && !string.IsNullOrEmpty(keys.PublicKey);
+}
+
+<form id="subscribeForm" role="form" asp-controller="EmailList" asp-action="Subscribe"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-mode="replace"
+      data-ajax-update="#emailsubcontainer">
+    <input asp-for="ListId" type="hidden" />
+    <div class="row">
+        <div class="col-auto pb-2">
+            <label class="visually-hidden" asp-for="EmailAddress">@sr["Email address"]</label>
+            <input asp-for="EmailAddress" class="form-control" placeholder="@sr["Email"]" />
+        </div>
+        <div class="col-auto pb-2">
+            <label class="visually-hidden" asp-for="FirstName">First Name</label>
+            <input class="form-control" asp-for="FirstName" placeholder="@sr["First Name"]" />
+        </div>
+        <div class="col-auto pb-2">
+            <label class="visually-hidden" asp-for="LastName">Last Name</label>
+            <input class="form-control" asp-for="LastName" placeholder="@sr["Last Name"]" />
+        </div>
+        <div class="col-auto pb-2">
+            @if (shouldUseCaptcha)
+            {
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <script>
+                    function onSignupSubmit(token) {
+                        var subForm = $("#subscribeForm");
+                        subForm.validate();
+                        if (subForm.valid()) {
+                            subForm.submit();
+                        }
+                        else {
+                            grecaptcha.reset();
+                        }
+
+                    }
+                </script>
+                <button class="btn btn-default btn-block btn-primary g-recaptcha"
+                        data-sitekey="@keys.PublicKey"
+                        data-callback="onSignupSubmit">
+                    @sr["Sign Up"]
+                </button>
+            }
+            else
+            {
+                <input id="btnSubscribe" type="submit" class="btn btn-default btn-block btn-primary" value="@sr["Sign Up"]" />
+            }
+            <div asp-validation-summary="All" class="text-danger" style="display:inline;"></div>
+        </div>
+    </div>
+    @if (Model.FeaturedLists.Count > 0)
+    {
+        <div class="row">
+            <div class="col-auto">
+                <ul class="list-unstyled mb-0">
+                    @for (var i = 0; i < Model.FeaturedLists.Count; i++)
+                    {
+                        <li>
+                            @if (!Model.CurrentUserSubscriptions.Any(x => x.ListId.ToString() == Model.FeaturedLists[i].Value))
+                            {
+                                <input type="checkbox" asp-for="@Model.FeaturedLists[i].Selected" />
+                                <label asp-for="@Model.FeaturedLists[i].Selected">@Model.FeaturedLists[i].Text</label>
+                            }
+
+                            <input type="hidden" asp-for="@Model.FeaturedLists[i].Value" />
+                            <input type="hidden" asp-for="@Model.FeaturedLists[i].Text" />
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    }
+
+</form>
+
