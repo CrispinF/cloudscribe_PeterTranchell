@@ -1,0 +1,3 @@
+Sitemap: https://peter-tranchell.uk/api/sitemap
+Sitemap: https://peter-tranchell.uk/musical-works/api/sitemap
+Sitemap: https://peter-tranchell.uk/writings/api/sitemap

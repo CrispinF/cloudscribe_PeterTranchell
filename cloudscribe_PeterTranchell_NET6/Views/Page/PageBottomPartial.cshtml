@@ -1,0 +1,10 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@if (Context.Request.Path == "/")
+{
+    @await Component.InvokeAsync("EmailListSubscribe", new { })
+}
+
+@section Scripts {
+    <script src="~/cr/js/jquery.unobtrusive-ajax.min.js"></script>
+}
+

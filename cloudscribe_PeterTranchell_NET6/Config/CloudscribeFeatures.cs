@@ -69,8 +69,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddMetaWeblogForSimpleContent(config.GetSection("MetaWeblogApiOptions"));
             services.AddSimpleContentRssSyndiction();
-            services.AddCloudscribeSimpleContactFormCoreIntegration(config);
-            services.AddCloudscribeSimpleContactForm(config);
+            //services.AddCloudscribeSimpleContactFormCoreIntegration(config);
+            //services.AddCloudscribeSimpleContactForm(config);
 
             services.AddFormsCloudscribeCoreIntegration(config);
             services.AddFormsServices(config);

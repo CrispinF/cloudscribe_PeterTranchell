@@ -28,6 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     new CultureInfo("en-US"),
                     new CultureInfo("en-GB"),
+                    // nope, can only use supported MS cultures new CultureInfo("banana"),
                     //new CultureInfo("cy-GB"),
                     //new CultureInfo("fr-FR"),
                     //new CultureInfo("it-IT"),
@@ -66,7 +67,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 //  // My custom request culture logic
                 //  return new ProviderCultureResult("en");
                 //}));
-
+                options.RequestCultureProviders.Clear();
                 options.RequestCultureProviders.Insert(0, routeSegmentLocalizationProvider);
 
             });

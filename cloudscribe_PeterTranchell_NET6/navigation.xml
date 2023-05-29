@@ -7,12 +7,12 @@
          >
   <Children>
 
-       <NavNode key="Contact"
+       <!--<NavNode key="Contact"
             controller="Contact"
             action="Index"
             text="Contact">
         <Children />
-        </NavNode>
+        </NavNode>-->
       <NavNode key="PrivacyPolicy"
               controller="Privacy"
               action="Index"

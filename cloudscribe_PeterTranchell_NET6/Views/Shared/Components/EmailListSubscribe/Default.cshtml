@@ -1,0 +1,16 @@
+﻿@model cloudscribe.EmailList.Web.Mvc.ViewModels.EmailSubscribeViewModel
+@inject IStringLocalizer<cloudscribe.EmailList.Web.EmailListResources> sr
+<div class="container">
+<div class="card newsletter-subscribe-card">
+    <div class="card-header text-light bg-dark p-1 ps-2">
+        <h2 class="h5 m-0 p-0">
+                <a id="newsletter"><span class="fa fa-envelope"></span> @sr["Sign up for our newsletter"]</a>
+        </h2>
+    </div>
+    
+    <div id="emailsubcontainer" class="card-body pt-2">
+        <div class="card-text pb-2">Occasional emailed news from the Peter Tranchell Foundation. <a href="/newsletter">Find out more about the newsletter here</a>.</div>
+        @await Html.PartialAsync("EmailListSignUpPartial", Model)
+    </div>
+</div>
+</div>
