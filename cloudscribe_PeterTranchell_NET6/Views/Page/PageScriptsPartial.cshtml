@@ -1,8 +1,0 @@
-﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
-@if (Context.Request.Path == "/")
-{
-    await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); 
-    <script src="~/cr/js/jquery.unobtrusive-ajax.min.js"></script>
-}
-
-
