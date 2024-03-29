@@ -35,6 +35,8 @@
     @RenderSection("Styles", required: false)
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
     <base href="@Context.Request.Path" />
+    <!-- Clarity tracking code for https://peter-tranchell.uk/ -->
+    <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "lmwi6xv6kv");</script>
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"]">
      <header>
