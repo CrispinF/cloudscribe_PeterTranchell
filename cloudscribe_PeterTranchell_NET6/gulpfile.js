@@ -12,12 +12,11 @@ var gulp = require("gulp"),
 
 var config = {
     srcSassDir: './app-scss',
-/*    cssOutDir: './sitefiles/s1/themes/tranchell1custom/wwwroot/css',*/
-    cssOutDir: './SharedThemes/tranchell2/wwwroot/css',
+    cssOutDir: './SharedThemes/tranchell3/wwwroot/css',
     srcFileWatchPattern: './app-scss/*.scss'
 };
 
-gulp.task('buildtranchell2ThemeCss', function () {
+gulp.task('buildtranchell3ThemeCss', function () {
     return gulp.src(config.srcSassDir + '/style.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
@@ -39,5 +38,5 @@ gulp.task('buildtranchell2ThemeCss', function () {
 // if you run the default task it will watch for changes in files and then run the
 // array of tasks if any files changed. So for scss changes you can just refresh the page to see changes
 gulp.task('default', function () {
-    gulp.watch(config.srcFileWatchPattern, ['buildtranchell2ThemeCss']);
+    gulp.watch(config.srcFileWatchPattern, ['buildtranchell3ThemeCss']);
 });

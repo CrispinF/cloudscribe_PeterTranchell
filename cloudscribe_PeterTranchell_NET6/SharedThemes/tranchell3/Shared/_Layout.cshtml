@@ -27,10 +27,12 @@
     @RenderSection("Meta", required: false)
     <environment names="Development">
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
     </environment>
     <environment names="Staging,Production">
         @* CF added  asp-append-version="true" to make clients pick up theme changes *@
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     @RenderSection("Styles", required: false)
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
@@ -98,8 +100,8 @@
         <div class="d-flex p-2 h-100 flex-wrap flex-grow justify-content-center">
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Facebook Group in a new tab" href="https://www.facebook.com/groups/peter.tranchell" target="_blank"><span class="fab fa-facebook-square fa-3x" aria-hidden="true"></span></a></div>
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on X in a new tab" href="https://twitter.com/TranchellFndn" target="_blank"><span class="fab fa-x-twitter fa-3x" aria-hidden="true"></span></a></div>
-                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Bluesky in a new tab" href="https://bsky.app/profile/peter-tranchell.uk" target="_blank"><span class="fab fa-bluesky fa-3x" aria-hidden="true"></span></a></div>
-                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Instagram in a new tab" href="https://www.instagram.com/petertranchellfoundation/" target="_blank"><span class="fab fa-instagram fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Bluesky in a new tab" href="https://bsky.app/profile/peter-tranchell.uk" target="_blank"><span class="fa-brands fa-bluesky fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Instagram in a new tab" href="https://www.instagram.com/petertranchellfoundation/" target="_blank"><span class="fa-brands fa-instagram fa-3x" aria-hidden="true"></span></a></div>
 
                 
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell YouTube channel in a new tab" href="https://www.youtube.com/@@petertranchell7897" target="_blank"><span class="fab fa-youtube fa-3x" aria-hidden="true"></span></a></div>
