@@ -27,16 +27,20 @@
     @RenderSection("Meta", required: false)
     <environment names="Development">
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
     </environment>
     <environment names="Staging,Production">
         @* CF added  asp-append-version="true" to make clients pick up theme changes *@
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     @RenderSection("Styles", required: false)
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
     <base href="@Context.Request.Path" />
     <!-- Clarity tracking code for https://peter-tranchell.uk/ -->
     <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "lmwi6xv6kv");</script>
+
+
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"]">
      <header>
@@ -98,8 +102,8 @@
         <div class="d-flex p-2 h-100 flex-wrap flex-grow justify-content-center">
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Facebook Group in a new tab" href="https://www.facebook.com/groups/peter.tranchell" target="_blank"><span class="fab fa-facebook-square fa-3x" aria-hidden="true"></span></a></div>
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on X in a new tab" href="https://twitter.com/TranchellFndn" target="_blank"><span class="fab fa-x-twitter fa-3x" aria-hidden="true"></span></a></div>
-                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Bluesky in a new tab" href="https://bsky.app/profile/peter-tranchell.uk" target="_blank"><span class="fab fa-bluesky fa-3x" aria-hidden="true"></span></a></div>
-                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Instagram in a new tab" href="https://www.instagram.com/petertranchellfoundation/" target="_blank"><span class="fab fa-instagram fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Bluesky in a new tab" href="https://bsky.app/profile/peter-tranchell.uk" target="_blank"><span class="fa-brands fa-bluesky fa-3x" aria-hidden="true"></span></a></div>
+                <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell Foundation on Instagram in a new tab" href="https://www.instagram.com/petertranchellfoundation/" target="_blank"><span class="fa-brands fa-instagram fa-3x" aria-hidden="true"></span></a></div>
 
                 
                 <div class="p-2 p-sm-3 text-center"><a title="Open the Peter Tranchell YouTube channel in a new tab" href="https://www.youtube.com/@@petertranchell7897" target="_blank"><span class="fab fa-youtube fa-3x" aria-hidden="true"></span></a></div>
@@ -199,6 +203,21 @@
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
-
+    <script>
+        $('button').click(function(){
+          var cookieString = $(this).data("cookie-string");
+          // Check if cookieString contains text - this is only true when the user clicks the Accept button
+          if (cookieString) { 
+            // If cookieString is not empty or undefined
+            //console.log("Cookie String: " + cookieString); 
+            // clarity https://learn.microsoft.com/en-us/clarity/setup-and-installation/cookie-consent
+            window.clarity('consent');
+          }
+          else { 
+            // If cookieString is empty or undefined 
+            //console.log("Cookie String is empty or not defined."); 
+          }
+        });
+    </script>
 </body>
 </html>

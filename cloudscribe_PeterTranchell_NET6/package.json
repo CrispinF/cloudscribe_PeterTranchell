@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "private": true,
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.4",
         "bootstrap": "5.1.3",
         "clean-css": "^5.2.2",
         "eslint": "^8.52.0",
@@ -20,5 +19,8 @@
         "sass": "^1.53.0",
         "smartmenus": "^1.1.1",
         "smartmenus-bootstrap-4": "^0.1.0"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.7.1"
     }
 }
