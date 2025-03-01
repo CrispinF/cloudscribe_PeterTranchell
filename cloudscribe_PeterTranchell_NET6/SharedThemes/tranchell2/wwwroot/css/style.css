@@ -15829,7 +15829,7 @@ readers do not read off random characters that represent icons */
 a:not([href]) {
   /* Remove hyperlink styles for anchors without href. #18 move below stick header */
   all: unset;
-  padding-top: 100px;
+/*  padding-top: 100px;*/
   margin-top: -100px;
   /*    display: block;*/
 }
