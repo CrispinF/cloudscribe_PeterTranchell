@@ -192,7 +192,7 @@
         </footer>
     @RenderSection("Toolbar", required: false)
     <environment names="Development">
-        <script src="~/js/jquery.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.bundle.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/cr/js/bs4.smartmenus.min.js"></script>
     </environment>
@@ -203,6 +203,7 @@
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
+    @Html.RenderResources("js") @*render any js resources declared via helpers in partial views etc*@
     <script>
         $('button').click(function(){
           var cookieString = $(this).data("cookie-string");
