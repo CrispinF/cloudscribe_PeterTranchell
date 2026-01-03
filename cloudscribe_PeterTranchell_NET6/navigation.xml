@@ -642,6 +642,24 @@
 					 excludeFromSearchSiteMap="true">
 				  <Children> </Children>
 			  </NavNode>
+			  <NavNode key="PermittedIpAddresses"
+				  controller="SiteAdmin"
+				  action="PermittedIpAddresses"
+				  text="Permitted IP Addresses"
+				  iconCssClass="fas fa-check"
+				  componentVisibility="breadcrumbs,childtree,parenttree"
+				  authorizationPolicy="AdminPolicy">
+				  <Children />
+			  </NavNode>
+			  <NavNode key="BlockedIpAddresses"
+				  controller="SiteAdmin"
+				  action="BlockedIpAddresses"
+				  text="Blocked IP Addresses"
+				  iconCssClass="fas fa-ban"
+				  componentVisibility="breadcrumbs,childtree,parenttree"
+				  authorizationPolicy="AdminPolicy">
+				  <Children />
+			  </NavNode>
               <NavNode key="SystemInfo"
                        controller="SystemInfo"
                        action="Index"
