@@ -26,7 +26,7 @@
             <input class="form-control" asp-for="LastName" placeholder="@sr["Last Name"]" />
         </div>
         <div class="col-auto pb-2">
-            @if (shouldUseCaptcha)
+            @if (shouldUseCaptcha)  @* recaptcha not working as perhaps not coded to use invisible? CF 09/05/2025 *@
             {
                 <script src='https://www.google.com/recaptcha/api.js'></script>
                 <script>
