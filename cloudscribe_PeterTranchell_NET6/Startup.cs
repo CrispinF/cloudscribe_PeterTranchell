@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,12 @@ namespace cloudscribe_PeterTranchell_NET6
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+
+            // Register IHttpContextAccessor and a small adapter that provides
+            // IActionContextAccessor without referencing the framework's obsolete
+            // ActionContextAccessor concrete type.
+            services.AddHttpContextAccessor();
+            services.AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, HttpContextActionContextAccessor>();
 
             //// **** VERY IMPORTANT *****
             // This is a custom extension method in Config/DataProtection.cs
