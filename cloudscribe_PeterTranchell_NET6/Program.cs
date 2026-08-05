@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using cloudscribe.QueryTool.EFCore.Common;
+
 
 namespace cloudscribe_PeterTranchell_NET6
 {
