@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,11 @@ namespace cloudscribe_PeterTranchell_NET6
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+
+            // Ensure IActionContextAccessor is available for components (cloudscribe Forms, etc.)
+            // Some environments don't register this by default, which causes runtime errors like:
+            // "No service for type 'Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor' has been registered."
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             //// **** VERY IMPORTANT *****
             // This is a custom extension method in Config/DataProtection.cs
