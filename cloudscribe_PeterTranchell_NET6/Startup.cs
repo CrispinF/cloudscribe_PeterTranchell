@@ -35,10 +35,11 @@ namespace cloudscribe_PeterTranchell_NET6
         {
             services.AddMemoryCache();
 
-            // Ensure IActionContextAccessor is available for components (cloudscribe Forms, etc.)
-            // Some environments don't register this by default, which causes runtime errors like:
-            // "No service for type 'Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor' has been registered."
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            // Register IHttpContextAccessor and a small adapter that provides
+            // IActionContextAccessor without referencing the framework's obsolete
+            // ActionContextAccessor concrete type.
+            services.AddHttpContextAccessor();
+            services.AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, HttpContextActionContextAccessor>();
 
             //// **** VERY IMPORTANT *****
             // This is a custom extension method in Config/DataProtection.cs
