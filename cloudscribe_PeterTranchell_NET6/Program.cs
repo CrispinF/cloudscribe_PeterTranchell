@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using cloudscribe.QueryTool.EFCore.Common;
+// using cloudscribe.QueryTool.EFCore.Common;  // duplicated using removed
 
 namespace cloudscribe_PeterTranchell_NET6
 {
