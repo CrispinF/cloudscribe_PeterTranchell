@@ -28,16 +28,16 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
         <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
-        <link rel="stylesheet" href="~/js/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
     </environment>
     <environment names="Staging,Production">
         @* CF added  asp-append-version="true" to make clients pick up theme changes *@
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
-        <link rel="stylesheet" href="~/js/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     @RenderSection("Styles", required: false)
-    <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
+    <!-- <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics> -->
     <base href="@Context.Request.Path" />
     <!-- Clarity tracking code for https://peter-tranchell.uk/ -->
     <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "lmwi6xv6kv");</script>
@@ -208,7 +208,7 @@
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
     @Html.RenderResources("js") @*render any js resources declared via helpers in partial views etc*@
-    <script>
+@*     <script>
         $('button').click(function(){
           var cookieString = $(this).data("cookie-string");
           // Check if cookieString contains text - this is only true when the user clicks the Accept button
@@ -223,6 +223,68 @@
             //console.log("Cookie String is empty or not defined."); 
           }
         });
+    </script> *@
+    <script>
+            window.silktideConsentManager.init({
+                consentTypes: [
+                    {
+                        id: 'essential',
+                        label: 'Essential',
+                        description: 'Required for the site to work (login, forms, security).',
+                        required: true
+                    },
+                    {
+                        id: 'analytics',
+                        label: 'Analytics',
+                        description: 'Google Analytics and Microsoft Clarity help us understand how the site is used.',
+                        defaultValue: true,
+                        scripts: [
+                            {
+                                url: 'https://www.googletagmanager.com/gtag/js?id=G-J1FW2YXTB3',
+                                load: 'async',
+                                type: 'text/javascript',
+                                crossorigin: 'anonymous'
+                            }
+                        ],
+                        onAccept: function() {
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag() { dataLayer.push(arguments); }
+                            gtag('js', new Date());
+                            gtag('config', 'G-J1FW2YXTB3');
+                            //console.log('Silktide GA script injected');
+                            window.clarity('consent');
+                        },
+                        onReject: function() {
+                            //console.log('Silktide analytics onReject fired');
+                            //console.log('cookies visible to JS', document.cookie);
+                            // Disable GA
+                            window['ga-disable-G-J1FW2YXTB3'] = true;
+                            //console.log('Silktide GA disabled flag set');
+                            window.clarity('no-consent');
+                            // Delete GA cookies set on your domain
+                            const cookiesToDelete = [
+                                '_ga',
+                                '_ga_J1FW2YXTB3', // our property-specific cookie
+                                '_clck', // clarity
+                                '_clsk'  // clarity
+                            ];
+
+                            cookiesToDelete.forEach(function(name) {
+                                document.cookie = name + '=; Max-Age=0; path=/; domain=.peter-tranchell.uk;';
+                                //console.log('[Silktide] deleted cookie', name);
+                            });
+
+                        }
+                    }
+                ],
+                prompt: {
+                    position: 'bottomRight' // Options: 'center', 'bottomLeft', 'bottomCenter', 'bottomRight'
+                },
+                // Optional: cookie settings icon in a corner
+                icon: {
+                    position: 'bottomRight' // Options: 'bottomLeft', 'bottomRight'
+                }
+            });
     </script>
 </body>
 </html>
