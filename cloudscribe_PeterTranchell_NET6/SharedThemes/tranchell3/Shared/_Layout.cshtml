@@ -28,18 +28,21 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
         <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
     </environment>
     <environment names="Staging,Production">
         @* CF added  asp-append-version="true" to make clients pick up theme changes *@
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     @RenderSection("Styles", required: false)
-    <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
+    <!-- <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics> -->
     <base href="@Context.Request.Path" />
-    <!-- Clarity tracking code for https://peter-tranchell.uk/ -->
+    <!-- Clarity tracking code for https://peter-tranchell.uk/
+        removed here to load conditionally after consent is given via Silktide Consent Manager
     <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "lmwi6xv6kv");</script>
-
+     -->
 
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"]">
@@ -143,17 +146,17 @@
                     <li class=" me-2">
                         <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                     </li>
-                    @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
+@*                     @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
                     {
                         <li class="border-start ps-2 me-2">
                             <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                         </li>
-                    }
-                    <li class="border-start ps-2 me-2">
-                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
+                    } *@
+                    <li>
+                        <a class="text-nowrap" href="https://peter-tranchell.uk/privacy">Privacy Policy</a>
                     </li>
                     <li class="border-start ps-2 me-2">
-                        <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
+                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
                     </li>
 
                 </ul>
@@ -167,20 +170,19 @@
                         <li class="">
                             <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                         </li>
-                        @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
+@*                         @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
                         {
                             <li>
                                 <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                             </li>
-                        }
-                    
+                        } *@
+                    <li>
+                        <a class="text-nowrap" href="https://peter-tranchell.uk/privacy">Privacy Policy</a>
+                    </li>
                         <li>
 
                         <span class="text-nowrap">&copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
 
-                        </li>
-                        <li>
-                            <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
                         </li>
                     </ul>
                 </nav>
@@ -195,16 +197,18 @@
         <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.bundle.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/cr/js/bs4.smartmenus.min.js"></script>
+        <script src="~/js/silktide/silktide-consent-manager.js" cs-resolve-theme-resource="true" cs-tenant="@Tenant"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/jquery.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.bundle.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/cr/js/bs4.smartmenus.min.js" asp-append-version="true"></script>
+        <script src="~/js/silktide/silktide-consent-manager.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
     @Html.RenderResources("js") @*render any js resources declared via helpers in partial views etc*@
-    <script>
+@*     <script>
         $('button').click(function(){
           var cookieString = $(this).data("cookie-string");
           // Check if cookieString contains text - this is only true when the user clicks the Accept button
@@ -219,6 +223,74 @@
             //console.log("Cookie String is empty or not defined."); 
           }
         });
+    </script> *@
+    <script>
+            window.silktideConsentManager.init({
+                consentTypes: [
+                    {
+                        id: 'essential',
+                        label: 'Essential',
+                        description: 'Required for the site to work (login, forms, security).',
+                        required: true
+                    },
+                    {
+                        id: 'analytics',
+                        label: 'Analytics',
+                        description: 'Google Analytics and Microsoft Clarity help us understand how the site is used.',
+                        defaultValue: true,
+                        scripts: [
+                            {
+                                url: 'https://www.googletagmanager.com/gtag/js?id=G-J1FW2YXTB3',
+                                load: 'async',
+                                type: 'text/javascript',
+                                crossorigin: 'anonymous'
+                            }
+                        ],
+                        onAccept: function() {
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag() { dataLayer.push(arguments); }
+                            gtag('js', new Date());
+                            gtag('config', 'G-J1FW2YXTB3');
+                            //console.log('Silktide GA script injected');
+                            //window.clarity('consent');
+                            // Load Microsoft Clarity only after consent
+                            (function(c, l, a, r, i, t, y) {
+                                c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+                                t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+                                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+                            })(window, document, "clarity", "script", "lmwi6xv6kv");
+                        },
+                        onReject: function() {
+                            //console.log('Silktide analytics onReject fired');
+                            //console.log('cookies visible to JS', document.cookie);
+                            // Disable GA
+                            window['ga-disable-G-J1FW2YXTB3'] = true;
+                            //console.log('Silktide GA disabled flag set');
+                            //window.clarity('no-consent');
+                            // Delete GA cookies set on your domain
+                            const cookiesToDelete = [
+                                '_ga',
+                                '_ga_J1FW2YXTB3', // our property-specific cookie
+                                '_clck', // clarity
+                                '_clsk'  // clarity
+                            ];
+
+                            cookiesToDelete.forEach(function(name) {
+                                document.cookie = name + '=; Max-Age=0; path=/; domain=.peter-tranchell.uk;';
+                                //console.log('[Silktide] deleted cookie', name);
+                            });
+
+                        }
+                    }
+                ],
+                prompt: {
+                    position: 'bottomLeft' // Options: 'center', 'bottomLeft', 'bottomCenter', 'bottomRight'
+                },
+                // Optional: cookie settings icon in a corner
+                icon: {
+                    position: 'bottomLeft' // Options: 'bottomLeft', 'bottomRight'
+                }
+            });
     </script>
 </body>
 </html>
