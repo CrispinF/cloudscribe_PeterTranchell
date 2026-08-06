@@ -39,9 +39,10 @@
     @RenderSection("Styles", required: false)
     <!-- <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics> -->
     <base href="@Context.Request.Path" />
-    <!-- Clarity tracking code for https://peter-tranchell.uk/ -->
+    <!-- Clarity tracking code for https://peter-tranchell.uk/
+        removed here to load conditionally after consent is given via Silktide Consent Manager
     <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "lmwi6xv6kv");</script>
-
+     -->
 
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"]">
@@ -145,17 +146,17 @@
                     <li class=" me-2">
                         <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                     </li>
-                    @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
+@*                     @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
                     {
                         <li class="border-start ps-2 me-2">
                             <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                         </li>
-                    }
-                    <li class="border-start ps-2 me-2">
-                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
+                    } *@
+                    <li>
+                        <a class="text-nowrap" href="https://peter-tranchell.uk/privacy">Privacy Policy</a>
                     </li>
                     <li class="border-start ps-2 me-2">
-                        <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
+                        <span class="text-nowrap">Copyright &copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
                     </li>
 
                 </ul>
@@ -169,20 +170,19 @@
                         <li class="">
                             <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
                         </li>
-                        @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
+@*                         @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
                         {
                             <li>
                                 <a class="text-nowrap" asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
                             </li>
-                        }
-                    
+                        } *@
+                    <li>
+                        <a class="text-nowrap" href="https://peter-tranchell.uk/privacy">Privacy Policy</a>
+                    </li>
                         <li>
 
                         <span class="text-nowrap">&copy; @DateTime.Now.Year - <a class="text-nowrap" href="@(Tenant?.CompanyWebsite ?? "")">@(Tenant?.CompanyName ?? Tenant?.SiteName)</a></span>
 
-                        </li>
-                        <li>
-                            <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
                         </li>
                     </ul>
                 </nav>
@@ -252,7 +252,13 @@
                             gtag('js', new Date());
                             gtag('config', 'G-J1FW2YXTB3');
                             //console.log('Silktide GA script injected');
-                            window.clarity('consent');
+                            //window.clarity('consent');
+                            // Load Microsoft Clarity only after consent
+                            (function(c, l, a, r, i, t, y) {
+                                c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+                                t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+                                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+                            })(window, document, "clarity", "script", "lmwi6xv6kv");
                         },
                         onReject: function() {
                             //console.log('Silktide analytics onReject fired');
@@ -260,7 +266,7 @@
                             // Disable GA
                             window['ga-disable-G-J1FW2YXTB3'] = true;
                             //console.log('Silktide GA disabled flag set');
-                            window.clarity('no-consent');
+                            //window.clarity('no-consent');
                             // Delete GA cookies set on your domain
                             const cookiesToDelete = [
                                 '_ga',
@@ -278,11 +284,11 @@
                     }
                 ],
                 prompt: {
-                    position: 'bottomRight' // Options: 'center', 'bottomLeft', 'bottomCenter', 'bottomRight'
+                    position: 'bottomLeft' // Options: 'center', 'bottomLeft', 'bottomCenter', 'bottomRight'
                 },
                 // Optional: cookie settings icon in a corner
                 icon: {
-                    position: 'bottomRight' // Options: 'bottomLeft', 'bottomRight'
+                    position: 'bottomLeft' // Options: 'bottomLeft', 'bottomRight'
                 }
             });
     </script>
