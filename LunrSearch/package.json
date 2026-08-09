@@ -1,0 +1,17 @@
+{
+  "name": "cloudscribe_petertranchell_lunrsearch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "indexer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.19.0",
+    "cheerio": "^1.2.0",
+    "lunr": "^2.3.9"
+  }
+}

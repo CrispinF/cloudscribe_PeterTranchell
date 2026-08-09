@@ -1,0 +1,150 @@
+/* Container */
+.search-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+/* Search box */
+#search-box {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+#search-box:focus {
+    border-color: #0078d4; /* Microsoft blue */
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.25);
+    outline: none;
+}
+
+/* Results container */
+#search-results {
+    margin-top: 1.5rem;
+}
+
+/* Each result */
+.search-result {
+    padding: 1rem 1.2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    background: #fafafa;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.search-result:hover {
+    background: #f0f8ff;
+    border-color: #0078d4;
+}
+
+/* Title */
+.search-result h2 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1.1rem;
+}
+
+.search-result h2 a {
+    text-decoration: none;
+    color: #005799;
+}
+
+.search-result h2 a:hover {
+    text-decoration: underline;
+}
+
+/* Snippet */
+.search-result p {
+    margin: 0;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* “No results” message */
+#search-results p {
+    /* font-style: italic; */
+    color: #545454;
+}
+
+#search-meta {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.9rem;
+    font-style: italic;
+}
+
+/* .search-highlight {
+    background-color: #ffeb3b;
+    padding: 0 2px;
+	font-weight: bold;
+} */
+
+mark {
+    padding: 0;
+    background-color: #ffeb3b;
+}
+
+.search-suggestion {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.search-suggestion a {
+    color: #0078d4;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.search-suggestion a:hover {
+    text-decoration: underline;
+}
+
+.search-url {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.3rem;
+}
+
+.search-result-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.search-thumb {
+    width: 90px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.share-tools {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.share-tools a {
+    margin-right: 0.6rem;
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.share-tools a:hover {
+    text-decoration: underline;
+}
+
+.share-feedback {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: #444;
+    transition: opacity 0.4s;
+    opacity: 0;
+}
+
+.share-link-text {
+	margin-right: 1.5rem;
+}

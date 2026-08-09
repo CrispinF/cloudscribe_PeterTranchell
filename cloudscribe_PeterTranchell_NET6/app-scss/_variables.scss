@@ -24,9 +24,9 @@ $pink:    #e83e8c !default;
 $red:     #E74C3C !default;
 $orange:  #fd7e14 !default;
 $yellow:  #F39C12 !default;
-$green:   #0e6e5b !default;
+$green:   #0B5B4B !default; /* was #0e6e5b but failed accessibility on contrast*/
 /* was #18BC9C but failed accessibility on contrast*/
-$teal:    #20c997 !default;
+$teal: #20c997 !default;
 $cyan:    #3498DB !default;
 
 $primary:       $blue !default;
@@ -80,7 +80,7 @@ $navbar-padding-y:                  1rem !default;
 $navbar-dark-color:                 $white !default;
 $navbar-dark-hover-color:           $success !default;
 
-$navbar-light-color:                rgba($green, 0.7);
+$navbar-light-color:                rgba($green, 1); /* was 0.7 but failed accessibility on contrast*/
 $navbar-light-hover-color:          rgba($gray-900, 0.7);
 $navbar-light-active-color:         rgba($black, .9);
 $navbar-brand-font-size:            1.5rem !default;
