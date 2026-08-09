@@ -34,6 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
+    <Content Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
+    <EmbeddedResource Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
+    <None Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="SharedThemes\tranchell2 - Copy\wwwroot\css\bootstrap.css_orig" />
     <None Remove="SharedThemes\tranchell2 - Copy\wwwroot\css\bootstrap.min.css_orig" />
     <None Remove="SharedThemes\tranchell2 - Copy\wwwroot\css\fontawesome-all.css_orig" />
