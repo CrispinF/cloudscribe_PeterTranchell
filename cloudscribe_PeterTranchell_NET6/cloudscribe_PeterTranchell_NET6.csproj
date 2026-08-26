@@ -22,6 +22,7 @@
     </None>
 
     <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <Content Remove="appsettings.Production.json" CopyToPublishDirectory="Never" />
 
     <Content Include="app-scss\_variables.scss">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

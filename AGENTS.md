@@ -12,7 +12,7 @@ Source for the Peter Tranchell website (https://peter-tranchell.uk/), built on t
 
 - Build: `dotnet build cloudscribe_PeterTranchell_NET6.sln` (single csproj; requires .NET 10 SDK). No tests, no linters, no CI to run.
 - DB is SQL Server via EF Core (all storage packages are MSSQL). Schema is **auto-created/migrated on startup** in `Program.cs` (`EnsureDataStorageIsReady`) — no manual `dotnet ef` migrations, and running the app needs a reachable SQL Server.
-- `appsettings.json` points at LocalDB. `appsettings.Development.json` overrides it with **real remote DB + SMTP credentials committed to the repo**; it is excluded from publish. Don't add new secrets to these files — use UserSecrets (`UserSecretsId` is set) or ask.
+- `appsettings.json` points at LocalDB. `appsettings.Development.json` overrides it with **real remote DB + SMTP credentials**; it and `appsettings.Production.json` are git-ignored (untracked) and excluded from publish — place the production file manually on the server next to the deployed DLL. Don't add new secrets to `appsettings.json` — use User Secrets (`UserSecretsId` is set) or ask.
 - `Startup.cs` deliberately uses legacy `UseMvc` routing under `#pragma warning disable MVC1005` — this is a documented workaround for cloudscribe.SimpleContent issue #466. Do not "modernize" it to `UseEndpoints`.
 
 ## Frontend

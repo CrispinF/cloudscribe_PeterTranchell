@@ -98,7 +98,10 @@ async function buildIndex(documents) {
 	fs.renameSync(path.join(outputDir, 'search-vocabulary.tmp.json'), path.join(outputDir, 'search-vocabulary.json'));
 
 	// Generate ISO8601 timestamp
-	const timestamp = new Date().toISOString();
+	//const timestamp = new Date().toISOString();
+	const timestamp = new Date().toLocaleString("en-GB", {
+		timeZone: "Europe/London"
+	});
 	// Write to version.txt
 	const versionPathTmp = path.join(outputDir, 'version.tmp.txt');
 	const versionPathFinal = path.join(outputDir, 'version.txt');

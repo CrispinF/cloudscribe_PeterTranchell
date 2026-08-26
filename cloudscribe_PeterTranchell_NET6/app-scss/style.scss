@@ -148,3 +148,70 @@ header .navbar {
 div.input-group-prepend > span.input-group-text > i {
     line-height: 1.5em;
 }
+// chat assistant panel
+.pt-chat-panel {
+    width: min(430px, 100%);
+    border-left: 1px solid #dee2e6;
+    box-shadow: -0.5rem 0 1rem rgba(0, 0, 0, 0.15);
+}
+
+.pt-chat-msg {
+    max-width: 88%;
+    padding: 0.5rem 0.8rem;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    overflow-wrap: break-word;
+
+    a {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+}
+
+.pt-chat-msg-user {
+    background-color: #212529;
+    color: #f8f9fa;
+    margin-left: auto;
+    border-bottom-right-radius: 0.25rem;
+
+    a {
+        color: #9ec5fe;
+    }
+}
+
+.pt-chat-msg-assistant {
+    background-color: #f1f3f5;
+    color: #212529;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.pt-chat-error {
+    background-color: #f8d7da;
+    color: #58151c;
+}
+
+.pt-chat-sources {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.75rem;
+
+    a {
+        color: #0d6efd;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+#pt-chat-open-btn {
+    white-space: nowrap;
+}
+
+#pt-recaptcha-v2 {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}

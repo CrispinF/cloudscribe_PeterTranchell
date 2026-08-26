@@ -1,8 +1,12 @@
 ﻿using cloudscribe.UserProperties.Models;
 using cloudscribe.UserProperties.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using cloudscribe.QueryTool.Services;
 using cloudscribe.QueryTool.EFCore.MSSQL;
@@ -89,6 +93,36 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddEmailListWithCloudscribeIntegration(config);
 
             services.AddScoped<IQueryTool, QueryTool>();
+
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
+            services.Configure<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatOptions>(config.GetSection("ChatOptions"));
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.SiteCorpusProvider>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.EmbeddingClient>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.LlmChatClient>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatIndexService>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.RecaptchaVerifier>();
+            services.AddHostedService<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatWarmupService>();
+            services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.GlobalLimiter = System.Threading.RateLimiting.PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                {
+                    var chatOptions = httpContext.RequestServices
+                        .GetRequiredService<Microsoft.Extensions.Options.IOptions<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatOptions>>().Value;
+                    if (chatOptions.Enabled && httpContext.Request.Path.StartsWithSegments("/api/chat"))
+                    {
+                        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                        return System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(ip, _ =>
+                            new System.Threading.RateLimiting.FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = Math.Max(1, chatOptions.RateLimitRequestsPerMinute),
+                                Window = TimeSpan.FromMinutes(1)
+                            });
+                    }
+                    return System.Threading.RateLimiting.RateLimitPartition.GetNoLimiter<string>("none");
+                });
+            });
 
 
 

@@ -1,0 +1,56 @@
+@using Microsoft.Extensions.Configuration
+@using cloudscribe.Core.Web.Components
+@inject IConfiguration Configuration
+@inject ISiteContextResolver siteResolver
+@{
+    var chatEnabled = Configuration["ChatOptions:Enabled"];
+    var enabled = string.IsNullOrEmpty(chatEnabled) || !chatEnabled.Equals("false", StringComparison.OrdinalIgnoreCase);
+    var useRecaptchaSetting = Configuration["ChatOptions:UseRecaptcha"];
+    var useRecaptcha = string.IsNullOrEmpty(useRecaptchaSetting) || useRecaptchaSetting.Equals("true", StringComparison.OrdinalIgnoreCase);
+    var site = enabled ? await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path) : null;
+    var recaptchaSiteKey = useRecaptcha
+        ? (!string.IsNullOrWhiteSpace(site?.RecaptchaPublicKey)
+            ? site.RecaptchaPublicKey
+            : (Configuration["RecaptchaKeys:PublicKey"] ?? ""))
+        : "";
+    var recaptchaMode = string.IsNullOrWhiteSpace(recaptchaSiteKey) ? "" : ((site != null && site.UseInvisibleRecaptcha) ? "v2" : "v3");
+}
+@if (enabled)
+{
+<div class="offcanvas offcanvas-end pt-chat-panel" tabindex="-1" id="ptChatPanel"
+     aria-labelledby="ptChatHeader" aria-modal="false"
+     data-enabled="@enabled.ToString().ToLowerInvariant()"
+     data-recaptcha-sitekey="@recaptchaSiteKey"
+     data-recaptcha-mode="@recaptchaMode"
+     data-bs-backdrop="false"
+     data-bs-scroll="true">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="ptChatHeader">
+            <span class="fas fa-comments me-1" aria-hidden="true"></span>Ask about Peter Tranchell
+        </h5>
+        <div class="d-flex align-items-center">
+            <button id="pt-chat-clear" type="button" class="btn btn-sm btn-outline-secondary ms-3 me-2" title="Clear conversation" aria-label="Clear conversation">
+                <span class="fas fa-trash-alt" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-0">
+        <div id="pt-chat-messages" class="flex-grow-1 overflow-auto px-3 pt-3" aria-live="polite"></div>
+        <form id="pt-chat-form" class="border-top p-2 d-flex gap-2" autocomplete="off">
+            <input id="pt-chat-input" name="question" class="form-control" type="text" maxlength="2000"
+                   placeholder="Ask about Tranchell's life, music or writings..." aria-label="Your question" />
+            <button id="pt-chat-send" class="btn btn-primary flex-shrink-0" type="submit" aria-label="Send question">
+                <span class="fas fa-paper-plane" aria-hidden="true"></span>
+            </button>
+        </form>
+        <p class="small text-center text-muted mb-1 px-2 pt-1">
+            Answers are AI-generated from site content - please verify details on the linked pages.
+            @if (!string.IsNullOrWhiteSpace(recaptchaSiteKey))
+            {
+                <br/><span>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</span>
+            }
+        </p>
+    </div>
+</div>
+}
