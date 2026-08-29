@@ -3,11 +3,34 @@ using System.Collections.Generic;
 
 namespace cloudscribe_PeterTranchell_NET6.Services.Chat
 {
+    public enum CorpusSource
+    {
+        Database = 0,
+        Lunr = 1
+    }
+
     public class ChatOptions
     {
         public bool Enabled { get; set; } = true;
 
+        public CorpusSource Source { get; set; } = CorpusSource.Database;
+
+        /// <summary>
+        /// The Azure AI Foundry endpoint base URL for embeddings/chat calls.
+        /// Not the public website origin - use <see cref="SiteBaseUrl"/> for that.
+        /// </summary>
         public string BaseUrl { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The origin (scheme + host) of the public website, used to build absolute
+        /// content URLs in the corpus, e.g. "https://peter-tranchell.uk".
+        /// Distinct from <see cref="BaseUrl"/> (the Azure AI Foundry endpoint).
+        /// </summary>
+        public string SiteBaseUrl { get; set; } = "https://peter-tranchell.uk";
+
+        public string BlogPathRoot { get; set; } = "blog";
+
+        public Dictionary<string, string> BlogPathBySiteFolder { get; set; } = new Dictionary<string, string>();
 
         public string ApiKey { get; set; } = string.Empty;
 

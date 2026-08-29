@@ -17,7 +17,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
         private const string MetaFile = "chat-cache-meta.json";
         private const string VectorFile = "chat-cache-vectors.bin";
 
-        private readonly SiteCorpusProvider _corpusProvider;
+        private readonly CorpusProvider _corpusProvider;
         private readonly EmbeddingClient _embeddings;
         private readonly IWebHostEnvironment _env;
         private readonly ChatOptions _options;
@@ -30,7 +30,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
         private bool _built;
 
         public ChatIndexService(
-            SiteCorpusProvider corpusProvider,
+            CorpusProvider corpusProvider,
             EmbeddingClient embeddings,
             IWebHostEnvironment env,
             IOptions<ChatOptions> optionsAccessor,
@@ -409,6 +409,11 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
                     "Chat cache expired: {Age:F1}h old, refresh interval is {Interval}h",
                     age.TotalHours, _options.RefreshIntervalHours);
                 return false;
+            }
+
+            if (_options.Source == CorpusSource.Database)
+            {
+                return true;
             }
 
             var versionPath = Path.Combine(_env.WebRootPath!, "lunr-index", "version.txt");

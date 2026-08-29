@@ -98,6 +98,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpContextAccessor();
             services.Configure<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatOptions>(config.GetSection("ChatOptions"));
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.SiteCorpusProvider>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.DatabaseCorpusProvider>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.CorpusProvider>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.EmbeddingClient>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.LlmChatClient>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatIndexService>();

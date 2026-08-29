@@ -32,10 +32,10 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
             }
 
             _logger.LogWarning(
-                "Chat warmup starting: Configured={Configured}, EmbeddingsConfigured={Embeddings}, BaseUrlSet={BaseUrl}, ApiKeySet={ApiKey}, ChatDeployment='{Chat}', EmbeddingDeployment='{Embedding}', Env={Env}",
+                "Chat warmup starting: Configured={Configured}, EmbeddingsConfigured={Embeddings}, BaseUrlSet={BaseUrl}, ApiKeySet={ApiKey}, ChatDeployment='{Chat}', EmbeddingDeployment='{Embedding}', Source='{Source}', Env={Env}",
                 _options.IsConfigured(), _options.IsConfigured() && !string.IsNullOrWhiteSpace(_options.EmbeddingDeployment),
                 !string.IsNullOrWhiteSpace(_options.BaseUrl), !string.IsNullOrWhiteSpace(_options.ApiKey),
-                _options.ChatDeployment, _options.EmbeddingDeployment, Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+                _options.ChatDeployment, _options.EmbeddingDeployment, _options.Source, Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
             var vectorRetryAttempts = 0;
             while (!stoppingToken.IsCancellationRequested)

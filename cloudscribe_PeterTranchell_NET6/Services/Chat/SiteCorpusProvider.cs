@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,7 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace cloudscribe_PeterTranchell_NET6.Services.Chat
 {
-    public class SiteCorpusProvider
+    public class SiteCorpusProvider : ICorpusProvider
     {
         private const string IndexFolder = "lunr-index";
         private static readonly Regex CssAtRule = new Regex(@"@[a-zA-Z-]+[\w\s-]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}", RegexOptions.Compiled);
@@ -125,11 +123,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
 
         internal static string ComputeHash(string title, string body)
         {
-            using var sha = SHA256.Create();
-            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(title + "\n" + body));
-            var sb = new StringBuilder(bytes.Length * 2);
-            for (var i = 0; i < bytes.Length; i++) sb.Append(bytes[i].ToString("x2"));
-            return sb.ToString();
+            return CorpusText.ComputeHash(title, body);
         }
     }
 }
