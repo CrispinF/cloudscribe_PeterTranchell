@@ -103,6 +103,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.EmbeddingClient>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.LlmChatClient>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatIndexService>();
+            services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatNonceService>();
             services.AddSingleton<cloudscribe_PeterTranchell_NET6.Services.Chat.RecaptchaVerifier>();
             services.AddHostedService<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatWarmupService>();
             services.AddRateLimiter(options =>

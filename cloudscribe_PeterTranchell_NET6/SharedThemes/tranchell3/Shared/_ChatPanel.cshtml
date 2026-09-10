@@ -1,13 +1,18 @@
 @using Microsoft.Extensions.Configuration
 @using cloudscribe.Core.Web.Components
+@using cloudscribe_PeterTranchell_NET6.Services.Chat
 @inject IConfiguration Configuration
 @inject ISiteContextResolver siteResolver
+@inject ChatNonceService nonceService
 @{
     var chatEnabled = Configuration["ChatOptions:Enabled"];
     var enabled = string.IsNullOrEmpty(chatEnabled) || !chatEnabled.Equals("false", StringComparison.OrdinalIgnoreCase);
     var useRecaptchaSetting = Configuration["ChatOptions:UseRecaptcha"];
     var useRecaptcha = string.IsNullOrEmpty(useRecaptchaSetting) || useRecaptchaSetting.Equals("true", StringComparison.OrdinalIgnoreCase);
+    var nonceSetting = Configuration["ChatOptions:NonceEnabled"];
+    var nonceEnabled = string.IsNullOrEmpty(nonceSetting) || nonceSetting.Equals("true", StringComparison.OrdinalIgnoreCase);
     var site = enabled ? await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path) : null;
+    var chatNonce = enabled && nonceEnabled ? nonceService.GenerateToken() : "";
     var recaptchaSiteKey = useRecaptcha
         ? (!string.IsNullOrWhiteSpace(site?.RecaptchaPublicKey)
             ? site.RecaptchaPublicKey
@@ -20,6 +25,7 @@
 <div class="offcanvas offcanvas-end pt-chat-panel" tabindex="-1" id="ptChatPanel"
      aria-labelledby="ptChatHeader" aria-modal="false"
      data-enabled="@enabled.ToString().ToLowerInvariant()"
+     data-chat-nonce="@chatNonce"
      data-recaptcha-sitekey="@recaptchaSiteKey"
      data-recaptcha-mode="@recaptchaMode"
      data-bs-backdrop="false"

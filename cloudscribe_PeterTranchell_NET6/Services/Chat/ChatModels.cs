@@ -35,6 +35,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
     {
         public List<ChatMessageDto> Messages { get; set; } = new List<ChatMessageDto>();
         public string CaptchaToken { get; set; } = string.Empty;
+        public string Nonce { get; set; } = string.Empty;
     }
 
     public class ChatSourceDto

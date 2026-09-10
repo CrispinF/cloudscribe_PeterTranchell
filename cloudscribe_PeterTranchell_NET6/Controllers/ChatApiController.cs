@@ -19,6 +19,7 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
         private readonly ChatIndexService _indexService;
         private readonly LlmChatClient _llm;
         private readonly RecaptchaVerifier _recaptcha;
+        private readonly ChatNonceService _nonce;
         private readonly ChatOptions _options;
         private readonly ILogger<ChatApiController> _logger;
 
@@ -26,12 +27,14 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
             ChatIndexService indexService,
             LlmChatClient llm,
             RecaptchaVerifier recaptcha,
+            ChatNonceService nonce,
             IOptions<ChatOptions> optionsAccessor,
             ILogger<ChatApiController> logger)
         {
             _indexService = indexService;
             _llm = llm;
             _recaptcha = recaptcha;
+            _nonce = nonce;
             _options = optionsAccessor.Value;
             _logger = logger;
         }
@@ -47,14 +50,25 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
 
             if (!IsSameOrigin()) return Forbid();
 
-            await _recaptcha.LogResolutionOnceAsync();
-
-            if (_options.UseRecaptcha && await _recaptcha.IsConfiguredAsync())
+            if (_options.NonceEnabled)
             {
-                var ok = await _recaptcha.VerifyAsync(request?.CaptchaToken ?? string.Empty, RemoteIp());
-                if (!ok)
+                if (!_nonce.TryValidateToken(request?.Nonce ?? string.Empty, _options.NonceMaxAgeSeconds, out var nonceError))
                 {
-                    return StatusCode(403, new { error = "Verification failed. Please try again." });
+                    _logger.LogWarning("Chat nonce rejected: {Reason}", nonceError);
+                    return StatusCode(403, new { error = "Verification failed. Please refresh the page and try again." });
+                }
+            }
+            else
+            {
+                await _recaptcha.LogResolutionOnceAsync();
+
+                if (_options.UseRecaptcha && await _recaptcha.IsConfiguredAsync())
+                {
+                    var ok = await _recaptcha.VerifyAsync(request?.CaptchaToken ?? string.Empty, RemoteIp());
+                    if (!ok)
+                    {
+                        return StatusCode(403, new { error = "Verification failed. Please try again." });
+                    }
                 }
             }
 
@@ -98,6 +112,22 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
                 _logger.LogError(ex, "Chat request failed");
                 return StatusCode(502, new { error = "The assistant is temporarily unavailable. Please try again in a moment." });
             }
+        }
+
+        [HttpGet("api/chat/nonce")]
+        public IActionResult GetNonce([FromQuery(Name = "current")] string current)
+        {
+            if (!_options.Enabled) return NotFound();
+            if (!_options.NonceEnabled) return NotFound();
+            if (!IsSameOrigin()) return Forbid();
+
+            if (_nonce.TryRefreshToken(current ?? string.Empty, _options.NonceMaxAgeSeconds, _options.NonceRefreshGraceSeconds, _options.NonceMaxRefreshCount, out var newToken, out var error))
+            {
+                return Ok(new { nonce = newToken });
+            }
+
+            _logger.LogWarning("Chat nonce refresh rejected: {Reason}", error);
+            return StatusCode(403, new { error = "Verification failed. Please refresh the page and try again." });
         }
 
         private string ExtractQuestion(ChatRequestDto request)

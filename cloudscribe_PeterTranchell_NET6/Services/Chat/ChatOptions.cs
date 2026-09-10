@@ -60,6 +60,34 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
 
         public bool UseRecaptcha { get; set; } = false;
 
+        /// <summary>
+        /// When true, the server embeds a signed nonce in the chat panel page.
+        /// The client must send it back with every request. The server rejects
+        /// requests whose nonce is missing, tampered with, too fresh (&lt;2 s),
+        /// or older than <see cref="NonceMaxAgeSeconds"/>.
+        /// </summary>
+        public bool NonceEnabled { get; set; } = true;
+
+        /// <summary>
+        /// Maximum acceptable age (in seconds) for a nonce before it expires.
+        /// Default 600 (10 minutes).
+        /// </summary>
+        public int NonceMaxAgeSeconds { get; set; } = 600;
+
+        /// <summary>
+        /// Extra time (in seconds) beyond <see cref="NonceMaxAgeSeconds"/> during
+        /// which an expired nonce may still be rolled into a fresh one via
+        /// GET /api/chat/nonce. Default 1800 (30 minutes).
+        /// </summary>
+        public int NonceRefreshGraceSeconds { get; set; } = 1800;
+
+        /// <summary>
+        /// Maximum number of times a single nonce chain may be refreshed.
+        /// Default 5 - prevents one page-fetched nonce from being farmed
+        /// indefinitely through the refresh endpoint.
+        /// </summary>
+        public int NonceMaxRefreshCount { get; set; } = 5;
+
         public string SystemPrompt { get; set; } = string.Empty;
 
         public bool IsConfigured()

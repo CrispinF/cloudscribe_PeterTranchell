@@ -300,23 +300,39 @@
             messages: transcript.slice(-MAX_SENT).map(function (m) {
                 return { role: m.role, content: m.content };
             }),
-            captchaToken: ''
+            captchaToken: '',
+            nonce: panel.getAttribute('data-chat-nonce') || ''
         };
 
-        var siteKey = panel.getAttribute('data-recaptcha-sitekey') || '';
-        var recaptchaMode = panel.getAttribute('data-recaptcha-mode') || '';
-        ensureRecaptcha(siteKey, recaptchaMode).then(function (token) {
-            payload.captchaToken = token || '';
+        var doFetch = function () {
             return fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-        }).then(function (response) {
+        };
+
+        var handleResponse = function (response) {
             return response.json().then(function (data) {
                 return { ok: response.ok, status: response.status, data: data };
             });
-        }).then(function (result) {
+        };
+
+        function refreshNonce(current) {
+            var url = '/api/chat/nonce?current=' + encodeURIComponent(current || '');
+            return fetch(url).then(function (r) {
+                return r.json().then(function (d) {
+                    return { ok: r.ok, data: d };
+                });
+            }).then(function (res) {
+                if (res.ok && res.data && res.data.nonce) return res.data.nonce;
+                return '';
+            }).catch(function () {
+                return '';
+            });
+        }
+
+        function renderResult(result) {
             thinking.remove();
             var reply;
             if (result.ok && result.data && result.data.reply) {
@@ -332,12 +348,46 @@
             saveTranscript();
             setBusy(false);
             input.focus();
-        }).catch(function () {
-            thinking.remove();
-            appendMessage('assistant', 'Sorry, I could not reach the server. Please check your connection and try again.', true);
-            setBusy(false);
-            input.focus();
-        });
+        }
+
+        var attempts = 0;
+        function runAttempt() {
+            var promise;
+            if (payload.nonce) {
+                promise = doFetch().then(handleResponse);
+            } else {
+                var siteKey = panel.getAttribute('data-recaptcha-sitekey') || '';
+                var recaptchaMode = panel.getAttribute('data-recaptcha-mode') || '';
+                promise = ensureRecaptcha(siteKey, recaptchaMode).then(function (token) {
+                    payload.captchaToken = token || '';
+                    return doFetch();
+                }).then(handleResponse);
+            }
+
+            promise.then(function (result) {
+                if (result.ok || result.status !== 403 || !payload.nonce || attempts >= 1) {
+                    renderResult(result);
+                    return;
+                }
+                attempts++;
+                refreshNonce(payload.nonce).then(function (fresh) {
+                    if (!fresh) {
+                        renderResult(result);
+                        return;
+                    }
+                    payload.nonce = fresh;
+                    panel.setAttribute('data-chat-nonce', fresh);
+                    runAttempt();
+                });
+            }).catch(function () {
+                thinking.remove();
+                appendMessage('assistant', 'Sorry, I could not reach the server. Please check your connection and try again.', true);
+                setBusy(false);
+                input.focus();
+            });
+        }
+
+        runAttempt();
     }
 
     function renderWelcome() {
