@@ -50,6 +50,14 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
         public List<ChatSourceDto> Sources { get; set; } = new List<ChatSourceDto>();
     }
 
+    public class ChatCompletionResult
+    {
+        public string Content { get; set; } = string.Empty;
+        public int PromptTokens { get; set; }
+        public int CompletionTokens { get; set; }
+        public int TotalTokens { get; set; }
+    }
+
     public class RetrievedChunk
     {
         public string Url { get; set; } = string.Empty;

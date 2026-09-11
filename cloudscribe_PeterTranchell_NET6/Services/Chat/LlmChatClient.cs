@@ -47,7 +47,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
             _logger = logger;
         }
 
-        public async Task<string> RewriteQueryAsync(
+        public async Task<ChatCompletionResult> RewriteQueryAsync(
             IReadOnlyList<ChatMessageDto> history,
             string question)
         {
@@ -62,8 +62,9 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
                 messages.Add(new { role = "user", content = question });
 
                 var reply = await SendMessagesAsync(messages, 200).ConfigureAwait(false);
-                if (string.IsNullOrWhiteSpace(reply)) return null;
-                return reply.Trim().Trim('"', '\'', '`').Trim();
+                if (reply == null || string.IsNullOrWhiteSpace(reply.Content)) return null;
+                reply.Content = reply.Content.Trim().Trim('"', '\'', '`').Trim();
+                return reply;
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
             }
         }
 
-        public async Task<string> CompleteAsync(
+        public async Task<ChatCompletionResult> CompleteAsync(
             IReadOnlyList<ChatMessageDto> history,
             string question,
             RetrievalResult context)
@@ -91,7 +92,7 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
             return await SendMessagesAsync(messages, _options.MaxOutputTokens).ConfigureAwait(false);
         }
 
-        private async Task<string> SendMessagesAsync(List<object> messages, int maxOutputTokens)
+        private async Task<ChatCompletionResult> SendMessagesAsync(List<object> messages, int maxOutputTokens)
         {
             var client = _httpClientFactory.CreateClient("ChatLlm");
             var url = AzureOpenAi.BuildUrl(_options, _options.ChatDeployment, "/openai/deployments/", "/chat/completions?api-version=");
@@ -133,7 +134,36 @@ namespace cloudscribe_PeterTranchell_NET6.Services.Chat
             {
                 content += "\n\n[... response truncated due to length; try asking a more specific question]";
             }
-            return content;
+
+            var promptTokens = 0;
+            var completionTokens = 0;
+            var totalTokens = 0;
+            if (doc.RootElement.TryGetProperty("usage", out var usageElement)
+                && usageElement.ValueKind == JsonValueKind.Object)
+            {
+                promptTokens = ReadTokenCount(usageElement, "prompt_tokens");
+                completionTokens = ReadTokenCount(usageElement, "completion_tokens");
+                totalTokens = ReadTokenCount(usageElement, "total_tokens");
+            }
+
+            return new ChatCompletionResult
+            {
+                Content = content,
+                PromptTokens = promptTokens,
+                CompletionTokens = completionTokens,
+                TotalTokens = totalTokens > 0 ? totalTokens : promptTokens + completionTokens
+            };
+        }
+
+        private static int ReadTokenCount(JsonElement element, string propertyName)
+        {
+            if (element.TryGetProperty(propertyName, out var value)
+                && value.ValueKind == JsonValueKind.Number
+                && value.TryGetInt32(out var count))
+            {
+                return count;
+            }
+            return 0;
         }
 
         private static string BuildUserMessage(string question, RetrievalResult context)

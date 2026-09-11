@@ -428,6 +428,7 @@
 
     panel.addEventListener('shown.bs.offcanvas', function () {
         try { sessionStorage.setItem(OPEN_KEY, '1'); } catch (e) {}
+        dismissCoachmark();
         input.focus();
     });
 
@@ -446,4 +447,83 @@
             if (oc) oc.show();
         }
     });
+
+    // ---- one-time coach mark for the chat button (desktop only) ----
+    var COACH_KEY = 'pt-chat-coachmark-dismissed';
+    var COACH_MIN_WIDTH = 992;
+    var coachTimer = null;
+    var coach = null;
+
+    function coachDismissed() {
+        try { return localStorage.getItem(COACH_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    function dismissCoachmark() {
+        try { localStorage.setItem(COACH_KEY, '1'); } catch (e) {}
+        if (coachTimer) { clearTimeout(coachTimer); coachTimer = null; }
+        if (!coach) return;
+        var el = coach;
+        coach = null;
+        el.classList.remove('pt-coachmark-visible');
+        window.setTimeout(function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+        }, 300);
+    }
+
+    var openButton = document.getElementById('pt-chat-open-btn');
+    if (openButton) openButton.addEventListener('click', dismissCoachmark);
+
+    function positionCoachmark() {
+        var btn = document.getElementById('pt-chat-open-btn');
+        if (!btn || !coach) return;
+        var r = btn.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) {
+            dismissCoachmark();
+            return;
+        }
+        coach.style.top = (r.bottom + 10) + 'px';
+        coach.style.right = Math.max(4, Math.round(window.innerWidth - r.right)) + 'px';
+    }
+
+    function buildCoachmark() {
+        var el = document.createElement('div');
+        el.id = 'pt-coachmark';
+        el.setAttribute('role', 'region');
+        el.setAttribute('aria-label', 'New chat assistant');
+
+        var title = document.createElement('div');
+        title.className = 'pt-coachmark-title';
+        title.innerHTML = '<span class="fas fa-comments me-1" aria-hidden="true"></span>New: chat assistant';
+
+        var text = document.createElement('p');
+        text.textContent = 'Our new chat function can help you find out about Peter Tranchell, and to locate material on this site.';
+
+        var gotit = document.createElement('button');
+        gotit.id = 'pt-coachmark-gotit';
+        gotit.type = 'button';
+        gotit.className = 'btn btn-primary btn-sm';
+        gotit.textContent = 'Got it';
+        gotit.addEventListener('click', dismissCoachmark);
+
+        el.appendChild(title);
+        el.appendChild(text);
+        el.appendChild(gotit);
+        return el;
+    }
+
+    function maybeShowCoachmark() {
+        var btn = document.getElementById('pt-chat-open-btn');
+        if (!btn || window.innerWidth < COACH_MIN_WIDTH || coachDismissed()) return;
+        coach = buildCoachmark();
+        document.body.appendChild(coach);
+        positionCoachmark();
+        window.setTimeout(positionCoachmark, 100);
+        window.requestAnimationFrame(function () {
+            if (coach) coach.classList.add('pt-coachmark-visible');
+        });
+        window.addEventListener('scroll', positionCoachmark, { passive: true });
+        window.addEventListener('resize', positionCoachmark);
+    }
+
+    coachTimer = window.setTimeout(maybeShowCoachmark, 900);
 })();

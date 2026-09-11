@@ -35,6 +35,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="App_Data\**" />
+    <None Remove="App_Data\**" />
+
+    <Content Remove="wwwroot\lunr-index\**" />
+    <None Remove="wwwroot\lunr-index\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
     <Content Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />
     <EmbeddedResource Remove="SharedThemes\tranchell3\wwwroot\lunr-index\**" />

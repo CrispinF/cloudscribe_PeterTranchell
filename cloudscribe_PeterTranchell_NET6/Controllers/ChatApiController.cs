@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using cloudscribe_PeterTranchell_NET6.Services.Chat;
@@ -80,10 +81,16 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
 
             try
             {
+                var stopwatch = Stopwatch.StartNew();
                 var history = SanitizeHistory(request.Messages);
-                var searchQuery = history.Count > 0
-                    ? await _llm.RewriteQueryAsync(history, question).ConfigureAwait(false) ?? question
-                    : question;
+
+                ChatCompletionResult rewriteResult = null;
+                var searchQuery = question;
+                if (history.Count > 0)
+                {
+                    rewriteResult = await _llm.RewriteQueryAsync(history, question).ConfigureAwait(false);
+                    searchQuery = rewriteResult?.Content ?? question;
+                }
                 if (!string.Equals(searchQuery, question, StringComparison.Ordinal))
                 {
                     _logger.LogInformation("Chat retrieval query rewritten to: {Query}", searchQuery);
@@ -99,13 +106,24 @@ namespace cloudscribe_PeterTranchell_NET6.Controllers
                     });
                 }
 
-                var reply = await _llm.CompleteAsync(history, question, context);
-                if (string.IsNullOrWhiteSpace(reply))
+                var completion = await _llm.CompleteAsync(history, question, context);
+                if (completion == null || string.IsNullOrWhiteSpace(completion.Content))
                 {
                     return StatusCode(502, new { error = "The assistant is temporarily unavailable. Please try again in a moment." });
                 }
 
-                return Ok(new ChatResponseDto { Reply = reply, Sources = context.Sources });
+                stopwatch.Stop();
+                _logger.LogInformation(
+                    "Chat served: question=\"{Question}\" reply=\"{Reply}\" promptTokens={PromptTokens} completionTokens={CompletionTokens} totalTokens={TotalTokens} sources={SourceCount} elapsedMs={ElapsedMs}",
+                    question,
+                    completion.Content,
+                    completion.PromptTokens + (rewriteResult?.PromptTokens ?? 0),
+                    completion.CompletionTokens + (rewriteResult?.CompletionTokens ?? 0),
+                    completion.TotalTokens + (rewriteResult?.TotalTokens ?? 0),
+                    context.Sources.Count,
+                    stopwatch.ElapsedMilliseconds);
+
+                return Ok(new ChatResponseDto { Reply = completion.Content, Sources = context.Sources });
             }
             catch (Exception ex)
             {
