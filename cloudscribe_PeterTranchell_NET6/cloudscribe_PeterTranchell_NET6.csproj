@@ -22,6 +22,7 @@
     </None>
 
     <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <Content Remove="appsettings.Production.json" CopyToPublishDirectory="Never" />
 
     <Content Include="app-scss\_variables.scss">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -31,6 +32,14 @@
     <Content Include="sitefiles\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="SharedThemes\**\wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="App_Data\**" />
+    <None Remove="App_Data\**" />
+
+    <Content Remove="wwwroot\lunr-index\**" />
+    <None Remove="wwwroot\lunr-index\**" />
   </ItemGroup>
 
   <ItemGroup>

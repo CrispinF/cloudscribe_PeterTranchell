@@ -104,8 +104,23 @@ namespace cloudscribe_PeterTranchell_NET6
 
             // a customizable filter for logging
             // add exclusions in appsettings.json to remove noise in the logs
+            // the chat controller is allowed through at Information level only when
+            // Logging:Console:LogLevel for its category is set to "Information" (or lower),
+            // so the standard Logging > LogLevel section is the single switch
+            const string chatLoggingCategory = "cloudscribe_PeterTranchell_NET6.Controllers.ChatApiController";
+            var chatLoggingEnabled = Enum.TryParse(
+                config[$"Logging:Console:LogLevel:{chatLoggingCategory}"],
+                true,
+                out LogLevel chatLoggingLevel)
+                && chatLoggingLevel <= LogLevel.Information;
+
             bool logFilter(string loggerName, LogLevel logLevel)
             {
+                if (loggerName.StartsWith(chatLoggingCategory))
+                {
+                    return chatLoggingEnabled && logLevel >= LogLevel.Information;
+                }
+
                 if (dbLoggerConfig.ExcludedNamesSpaces.Any(f => loggerName.StartsWith(f)))
                 {
                     return false;

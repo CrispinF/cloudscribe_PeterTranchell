@@ -1,6 +1,10 @@
 ﻿@inject ISiteContextResolver siteResolver
 @inject ICoreThemeHelper themeHelper
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @{
+    var ptChatEnabled = !string.Equals(Configuration["ChatOptions:Enabled"], "false", StringComparison.OrdinalIgnoreCase);
+    var ptUseRecaptcha = !string.Equals(Configuration["ChatOptions:UseRecaptcha"], "false", StringComparison.OrdinalIgnoreCase);
     var themeSettings = themeHelper.GetThemeSettings();
     @*
         These settings can be set by a main view to show additional columns.
@@ -36,6 +40,10 @@
         <link rel="stylesheet" href="~/css/fontawesome_all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/silktide/silktide-consent-manager.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
+    @if (ptChatEnabled && ptUseRecaptcha && !string.IsNullOrWhiteSpace(Tenant?.RecaptchaPublicKey))
+    {
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    }
     @RenderSection("Styles", required: false)
     <!-- <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics> -->
     <base href="@Context.Request.Path" />
@@ -61,6 +69,12 @@
             <div class="collapse navbar-collapse ps-2" id="navbarNavDropdown">
                 @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap5TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
                 @await Html.PartialAsync("_LoginPartialWithDropdowns")
+                @if (ptChatEnabled)
+                {
+                    <button id="pt-chat-open-btn" type="button" class="btn btn-sm btn-outline-secondary ms-lg-2 my-1" aria-controls="ptChatPanel" aria-haspopup="dialog">
+                        <span class="fas fa-comments me-1" aria-hidden="true"></span>Chat
+                    </button>
+                }
 
             </div>
 
@@ -191,17 +205,24 @@
 
         </footer>
     @RenderSection("Toolbar", required: false)
+    <partial name="_ChatPanel" />
+    @if (ptChatEnabled && ptUseRecaptcha && !string.IsNullOrWhiteSpace(Tenant?.RecaptchaPublicKey))
+    {
+        <div id="pt-recaptcha-v2"></div>
+    }
     <environment names="Development">
         <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.bundle.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/cr/js/bs4.smartmenus.min.js"></script>
         <script src="~/js/silktide/silktide-consent-manager.js" cs-resolve-theme-resource="true" cs-tenant="@Tenant"></script>
+        <script src="~/js/chat.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/jquery.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.bundle.min.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/cr/js/bs4.smartmenus.min.js" asp-append-version="true"></script>
         <script src="~/js/silktide/silktide-consent-manager.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/js/chat.js" asp-append-version="true" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
