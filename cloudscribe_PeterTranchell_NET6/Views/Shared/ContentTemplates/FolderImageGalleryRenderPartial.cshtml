@@ -1,0 +1,106 @@
+@model cloudscribe_PeterTranchell_NET6.ViewModels.FolderImageGalleryViewModel
+@inject cloudscribe_PeterTranchell_NET6.Services.IFolderImageEnumerator imageEnumerator
+@{
+    var images = Model == null
+        ? new List<cloudscribe_PeterTranchell_NET6.Services.GalleryImage>()
+        : await imageEnumerator.GetImagesAsync(Model.FolderPath);
+
+    var uid = "ptg-" + Guid.NewGuid().ToString("N");
+    var headingId = uid + "-heading";
+    var captionId = uid + "-caption";
+    var statusId = uid + "-status";
+}
+
+@if (images.Count > 0)
+{
+    <link rel="stylesheet" href="/ptgallery/pt-folder-gallery.css" asp-append-version="true" />
+    <script src="/ptgallery/pt-folder-gallery.js" asp-append-version="true" defer></script>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model?.TopContent))
+{
+    <div class="pt-gallery-prose">@Html.Raw(Model.TopContent)</div>
+}
+
+@if (images.Count > 0)
+{
+    <section class="pt-gallery" data-pt-gallery-root aria-labelledby="@headingId">
+        <h2 id="@headingId" class="visually-hidden">Image gallery</h2>
+
+        <ul class="pt-gallery-grid">
+            @foreach (var image in images)
+            {
+                <li class="pt-gallery-cell">
+                    <button type="button" class="pt-gallery-thumb" data-pt-gallery-open>
+                        <img src="@image.Url"
+                             alt="@image.AltText"
+                             loading="lazy"
+                             decoding="async"
+                             width="320"
+                             height="240" />
+                    </button>
+                </li>
+            }
+        </ul>
+
+        <div class="pt-viewer" data-pt-gallery-viewer hidden>
+            <div class="pt-viewer-backdrop" data-pt-gallery-backdrop></div>
+
+            <div class="pt-viewer-dialog" role="dialog" aria-modal="true" aria-labelledby="@captionId" data-pt-gallery-dialog>
+                <div class="pt-viewer-toolbar">
+                    <span class="pt-viewer-position" id="@statusId" role="status" aria-live="polite" data-pt-gallery-position></span>
+
+                    <span class="pt-viewer-separator" aria-hidden="true"></span>
+
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-prev>
+                        <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous image</span>
+                    </button>
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-next>
+                        <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next image</span>
+                    </button>
+
+                    <span class="pt-viewer-separator" aria-hidden="true"></span>
+
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-zoom-out>
+                        <span class="fas fa-search-minus" aria-hidden="true"></span>
+                        <span class="visually-hidden">Zoom out</span>
+                    </button>
+                    <button type="button" class="pt-viewer-btn pt-viewer-zoom-value" data-pt-gallery-zoom-reset>
+                        <span data-pt-gallery-zoom-level>100%</span>
+                        <span class="visually-hidden">Zoom level. Activate to fit the image to the window.</span>
+                    </button>
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-zoom-in>
+                        <span class="fas fa-search-plus" aria-hidden="true"></span>
+                        <span class="visually-hidden">Zoom in</span>
+                    </button>
+
+                    <span class="pt-viewer-separator" aria-hidden="true"></span>
+
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-fullscreen>
+                        <span class="fas fa-expand" aria-hidden="true"></span>
+                        <span class="visually-hidden">Enter full screen</span>
+                    </button>
+                    <button type="button" class="pt-viewer-btn" data-pt-gallery-close>
+                        <span class="fas fa-times" aria-hidden="true"></span>
+                        <span class="visually-hidden">Close image viewer</span>
+                    </button>
+                </div>
+
+                <div class="pt-viewer-stage" data-pt-gallery-stage>
+                    <div class="pt-viewer-canvas" data-pt-gallery-canvas>
+                        <img class="pt-viewer-image" data-pt-gallery-image alt="" />
+                    </div>
+                </div>
+
+                <p class="pt-viewer-caption" id="@captionId" data-pt-gallery-caption></p>
+            </div>
+        </div>
+    </section>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model?.BottomContent))
+{
+    <div class="pt-gallery-prose">@Html.Raw(Model.BottomContent)</div>
+}
