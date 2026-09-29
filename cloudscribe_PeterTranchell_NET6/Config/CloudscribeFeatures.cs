@@ -94,6 +94,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IQueryTool, QueryTool>();
 
+            services.AddScoped<cloudscribe_PeterTranchell_NET6.Services.IFolderImageEnumerator, cloudscribe_PeterTranchell_NET6.Services.FolderImageEnumerator>();
+
             services.AddHttpClient();
             services.AddHttpContextAccessor();
             services.Configure<cloudscribe_PeterTranchell_NET6.Services.Chat.ChatOptions>(config.GetSection("ChatOptions"));
