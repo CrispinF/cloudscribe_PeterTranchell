@@ -94,6 +94,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IQueryTool, QueryTool>();
 
+            services.Configure<cloudscribe_PeterTranchell_NET6.Services.FolderGalleryOptions>(config.GetSection(cloudscribe_PeterTranchell_NET6.Services.FolderGalleryOptions.SectionName));
+
+            // Scoped so the per-request generation budget resets each request;
+            // cross-request concurrency is handled by the store's static
+            // per-folder locks.
+            services.AddScoped<cloudscribe_PeterTranchell_NET6.Services.IThumbnailStore, cloudscribe_PeterTranchell_NET6.Services.ThumbnailStore>();
             services.AddScoped<cloudscribe_PeterTranchell_NET6.Services.IFolderImageEnumerator, cloudscribe_PeterTranchell_NET6.Services.FolderImageEnumerator>();
 
             services.AddHttpClient();

@@ -32,7 +32,10 @@
             {
                 <li class="pt-gallery-cell">
                     <button type="button" class="pt-gallery-thumb" data-pt-gallery-open>
-                        <img src="@image.Url"
+                        @* The grid loads a small generated thumbnail; the viewer opens the
+   original, carried alongside so the script never has to guess. *@
+                        <img src="@image.ThumbnailUrl"
+                             data-pt-gallery-full="@image.Url"
                              alt="@image.AltText"
                              loading="lazy"
                              decoding="async"

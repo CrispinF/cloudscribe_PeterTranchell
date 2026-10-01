@@ -276,3 +276,7 @@ __pycache__/
 *.pyc
 # chat vector cache runtime files
 **/App_Data/chat-cache-*
+
+# Generated folder-gallery thumbnails. These are derived from the originals in
+# the same folder and are rebuilt on demand, so they must not be committed.
+**/siteuploadfiles/**/thumbnails/**

@@ -33,6 +33,8 @@ namespace cloudscribe_PeterTranchell_NET6.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISiteContextResolver _siteContextResolver;
         private readonly MultiTenantOptions _multiTenantOptions;
+        private readonly FolderGalleryOptions _options;
+        private readonly IThumbnailStore _thumbnailStore;
         private readonly ILogger<FolderImageEnumerator> _logger;
 
         public FolderImageEnumerator(
@@ -40,6 +42,8 @@ namespace cloudscribe_PeterTranchell_NET6.Services
             IHttpContextAccessor httpContextAccessor,
             ISiteContextResolver siteContextResolver,
             IOptions<MultiTenantOptions> multiTenantOptions,
+            IOptions<FolderGalleryOptions> options,
+            IThumbnailStore thumbnailStore,
             ILogger<FolderImageEnumerator> logger
             )
         {
@@ -47,6 +51,8 @@ namespace cloudscribe_PeterTranchell_NET6.Services
             _httpContextAccessor = httpContextAccessor;
             _siteContextResolver = siteContextResolver;
             _multiTenantOptions = multiTenantOptions.Value;
+            _options = options.Value;
+            _thumbnailStore = thumbnailStore;
             _logger = logger;
         }
 
@@ -104,6 +110,14 @@ namespace cloudscribe_PeterTranchell_NET6.Services
 
                 var urlFolder = CombineUrlFolder(urlRoot, folderPath);
 
+                // Thumbnails live in a sub-folder beside the originals, so they
+                // are reachable by the same static-file pipeline and are never
+                // mistaken for gallery images themselves (enumeration below is
+                // top-directory-only).
+                var thumbnailFolderName = _options.ResolvedFolderName;
+                var thumbnailPhysicalFolder = Path.Combine(physicalFolder, thumbnailFolderName);
+                var thumbnailUrlFolder = CombineUrlFolder(urlFolder, thumbnailFolderName);
+
                 var allFiles = Directory
                     .EnumerateFiles(physicalFolder, "*", SearchOption.TopDirectoryOnly)
                     .ToList();
@@ -139,10 +153,20 @@ namespace cloudscribe_PeterTranchell_NET6.Services
                     var fileName = Path.GetFileName(file);
                     if (string.IsNullOrEmpty(fileName)) { continue; }
 
+                    var url = urlFolder + Uri.EscapeDataString(fileName);
+
+                    // Generation is best-effort: any failure leaves the grid
+                    // pointing at the original rather than omitting the image.
+                    var thumbnailFileName = _thumbnailStore
+                        .EnsureThumbnail(file, thumbnailPhysicalFolder, cancellationToken);
+
                     images.Add(new GalleryImage
                     {
                         FileName = fileName,
-                        Url = urlFolder + Uri.EscapeDataString(fileName),
+                        Url = url,
+                        ThumbnailUrl = thumbnailFileName == null
+                            ? url
+                            : thumbnailUrlFolder + Uri.EscapeDataString(thumbnailFileName),
                         AltText = DeriveAltText(fileName)
                     });
                 }
@@ -308,10 +332,14 @@ namespace cloudscribe_PeterTranchell_NET6.Services
 
         private static string CombineUrlFolder(string urlRoot, string folderPath)
         {
+            // The root may already end in a separator (a nested folder is built
+            // from an existing folder URL), so trailing slashes are trimmed to
+            // keep generated URLs single-slashed.
+            var root = (urlRoot ?? string.Empty).TrimEnd('/');
             var trimmed = (folderPath ?? string.Empty).Replace('\\', '/').Trim().Trim('/');
-            if (trimmed.Length == 0) { return urlRoot + "/"; }
+            if (trimmed.Length == 0) { return root + "/"; }
 
-            var builder = new StringBuilder(urlRoot);
+            var builder = new StringBuilder(root);
             foreach (var segment in trimmed.Split('/'))
             {
                 if (segment.Length == 0) { continue; }

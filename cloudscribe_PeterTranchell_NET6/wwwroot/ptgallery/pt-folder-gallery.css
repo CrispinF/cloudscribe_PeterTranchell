@@ -160,8 +160,6 @@ html.pt-viewer-open body {
     padding: 0.75rem;
     overflow: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #1a1a1a;
     cursor: default;
     overscroll-behavior: contain;
@@ -175,6 +173,10 @@ html.pt-viewer-open body {
 .pt-viewer-canvas {
     flex: 0 0 auto;
     max-width: none;
+    /* Centre the canvas while it still fits the stage. Auto margins collapse to
+       zero once the canvas is larger than the stage, which keeps the overflow
+       on the scrollable side so the top and left edges remain reachable. */
+    margin: auto;
 }
 
 .pt-viewer-image {

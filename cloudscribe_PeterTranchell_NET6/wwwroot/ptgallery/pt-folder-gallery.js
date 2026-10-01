@@ -70,7 +70,15 @@
         this.items = this.openers
             .map(function (opener) {
                 var img = opener.querySelector('img');
-                return img ? { src: img.getAttribute('src'), alt: img.getAttribute('alt') || '' } : null;
+                if (!img) { return null; }
+                // The grid shows a generated thumbnail; the viewer opens the
+                // original from the companion attribute, falling back to the
+                // thumbnail when no separate full-size image is offered.
+                var full = img.getAttribute('data-pt-gallery-full');
+                return {
+                    src: full || img.getAttribute('src'),
+                    alt: img.getAttribute('alt') || ''
+                };
             })
             .filter(Boolean)
             .filter(function (item) { return !!item.src; });
